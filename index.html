@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Flashcards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Flashcards App</h1>
+  </header>
+
+  <main class="container">
+    <!-- Боковая панель с папками -->
+    <aside class="sidebar">
+      <h2>Папки</h2>
+      <div class="folder-controls">
+        <input type="text" id="new-folder-input" placeholder="Новая папка...">
+        <button id="add-folder-btn">+</button>
+      </div>
+      <ul id="folders-list">
+        <!-- Папки будут рендериться здесь -->
+      </ul>
+    </aside>
+
+    <!-- Основной контент -->
+    <section class="content">
+      <!-- Панель управления -->
+      <div class="actions">
+        <button id="open-modal-btn" class="btn primary">+ Создать карточку</button>
+      </div>
+
+      <!-- Заголовок активной папки -->
+      <h2 id="current-folder-title">Все карточки</h2>
+
+      <!-- Сетка карточек -->
+      <div id="cards-grid" class="cards-grid">
+        <!-- Карточки будут рендериться здесь -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Модальное окно создания карточки -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-modal-btn" class="close">&times;</span>
+      <h2>Новая карточка</h2>
+      <form id="card-form">
+        <label for="word-input">Слово / Фраза:</label>
+        <input type="text" id="word-input" required placeholder="Например: Apple">
+
+        <label for="translation-input">Перевод:</label>
+        <input type="text" id="translation-input" required placeholder="Например: Яблоко">
+
+        <label for="definition-input">Определение / Контекст (необязательно):</label>
+        <textarea id="definition-input" placeholder="A round fruit with red or green skin..."></textarea>
+
+        <label for="folder-select">Выберите папку:</label>
+        <select id="folder-select">
+          <!-- Опции папок подгрузятся динамически -->
+        </select>
+
+        <label for="image-input">Изображение (необязательно):</label>
+        <input type="file" id="image-input" accept="image/*">
+
+        <button type="submit" class="btn primary">Сохранить карточку</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
