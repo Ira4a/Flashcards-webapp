@@ -26,23 +26,36 @@ body {
 
 header {
   background-color: var(--card-bg);
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.icon-btn {
+  background-color: #f3f4f6;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.icon-btn:hover {
+  background-color: #e5e7eb;
 }
 
 .lang-selector {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .lang-selector select {
@@ -135,7 +148,7 @@ header {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
@@ -143,7 +156,7 @@ header {
   background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -167,23 +180,20 @@ header {
 .card .word {
   font-size: 1.2rem;
   font-weight: bold;
+  text-align: justify;
 }
 
 .card .translation {
   color: var(--primary);
   font-weight: 600;
+  text-align: justify;
 }
 
 .card .definition {
   font-size: 0.85rem;
   color: var(--text-light);
   font-style: italic;
-  text-alogn: justify;
-}
-textarea {
-  resize: none;
-  width: 100%;
-  height: 150px;
+  text-align: justify;
 }
 
 .delete-card-btn {
@@ -245,7 +255,7 @@ textarea {
   background: white;
   padding: 2rem;
   border-radius: 12px;
-  width: 100%;
+  width: 90%;
   max-width: 450px;
   position: relative;
   max-height: 90vh;
@@ -266,20 +276,45 @@ form, .form-group {
   margin-top: 1rem;
 }
 
-form input[type="text"], form textarea, form select, .form-group select {
+form input[type="text"], form input[type="password"], form input[type="url"], form select, .form-group select {
   padding: 0.6rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   width: 100%;
 }
 
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+form textarea {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
 }
 
-/* --- Стили виртуальной 3D карточки для проверки знаний --- */
+.divider {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.gist-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 0.5rem;
+}
+
+.gist-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.gist-actions button {
+  flex: 1;
+}
+
+/* 3D Flashcards Viewer */
 .study-viewer-content {
   max-width: 500px;
   text-align: center;
@@ -293,7 +328,7 @@ form input[type="text"], form textarea, form select, .form-group select {
 
 .flashcard-3d {
   width: 100%;
-  height: 260px;
+  height: 280px;
   perspective: 1000px;
   cursor: pointer;
   margin-bottom: 1.5rem;
@@ -327,6 +362,7 @@ form input[type="text"], form textarea, form select, .form-group select {
   align-items: center;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow-y: auto;
 }
 
 .flashcard-back {
@@ -345,10 +381,19 @@ form input[type="text"], form textarea, form select, .form-group select {
 }
 
 .flashcard-text {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: var(--text);
   word-break: break-word;
+  text-align: justify;
+  width: 100%;
+}
+
+.flashcard-img-preview {
+  max-width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .study-nav {
@@ -364,4 +409,31 @@ form input[type="text"], form textarea, form select, .form-group select {
 
 .hidden {
   display: none !important;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-text {
+    display: none;
+  }
 }
