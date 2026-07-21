@@ -178,6 +178,12 @@ header {
   font-size: 0.85rem;
   color: var(--text-light);
   font-style: italic;
+  text-alogn: justify;
+}
+textarea {
+  resize: none;
+  width: 100%;
+  height: 150px;
 }
 
 .delete-card-btn {
