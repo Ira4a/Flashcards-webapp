@@ -9,7 +9,7 @@
 <body>
 
   <header>
-    <h1 data-i18n="appTitle">🎴 Flashcards App</h1>
+    <h1 id="i18n-app-title">🎴 Flashcards App</h1>
     <div class="lang-selector">
       <label for="lang-select">🌐</label>
       <select id="lang-select">
@@ -24,9 +24,9 @@
   <main class="container">
     <!-- Боковая панель с папками -->
     <aside class="sidebar">
-      <h2 data-i18n="folders">Папки</h2>
+      <h2 id="i18n-folders">Папки</h2>
       <div class="folder-controls">
-        <input type="text" id="new-folder-input" placeholder="Новая папка..." data-i18n-ph="newFolderPh">
+        <input type="text" id="new-folder-input" placeholder="Новая папка...">
         <button id="add-folder-btn">+</button>
       </div>
       <ul id="folders-list">
@@ -38,7 +38,7 @@
     <section class="content">
       <!-- Панель управления -->
       <div class="actions">
-        <button id="open-modal-btn" class="btn primary" data-i18n="createCard">+ Создать карточку</button>
+        <button id="open-modal-btn" class="btn primary">+ Создать карточку</button>
       </div>
 
       <!-- Заголовок активной папки -->
@@ -55,35 +55,35 @@
   <div id="modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-modal-btn" class="close">&times;</span>
-      <h2 id="modal-title" data-i18n="modalTitleNew">Новая карточка</h2>
+      <h2 id="modal-title">Новая карточка</h2>
       <form id="card-form">
-        <!-- Скрытое поле для хранения ID при редактировании -->
+        <!-- Скрытое поле для ID карточки -->
         <input type="hidden" id="card-id-input">
 
-        <label for="word-input" data-i18n="lblWord">Слово / Фраза:</label>
-        <input type="text" id="word-input" required placeholder="Apple" data-i18n-ph="phWord">
+        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:</label>
+        <input type="text" id="word-input" required placeholder="Apple">
 
-        <label for="translation-input" data-i18n="lblTranslation">Перевод:</label>
-        <input type="text" id="translation-input" required placeholder="Яблоко" data-i18n-ph="phTranslation">
+        <label for="translation-input" id="i18n-lbl-translation">Перевод:</label>
+        <input type="text" id="translation-input" required placeholder="Яблоко">
 
-        <label for="definition-input" data-i18n="lblDefinition">Определение / Контекст (необязательно):</label>
-        <textarea id="definition-input" placeholder="A round fruit with red or green skin..." data-i18n-ph="phDefinition"></textarea>
+        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст (необязательно):</label>
+        <textarea id="definition-input" placeholder="A round fruit with red or green skin..."></textarea>
 
-        <label for="folder-select" data-i18n="lblSelectFolder">Выберите папку:</label>
+        <label for="folder-select" id="i18n-lbl-folder">Выберите папку:</label>
         <select id="folder-select">
           <!-- Опции подгрузятся динамически -->
         </select>
 
-        <label for="image-input" data-i18n="lblImage">Изображение (необязательно):</label>
+        <label for="image-input" id="i18n-lbl-image">Изображение (необязательно):</label>
         <input type="file" id="image-input" accept="image/*">
 
-        <!-- Превью существующего изображения при редактировании -->
+        <!-- Превью изображения при редактировании -->
         <div id="image-preview-container" class="hidden">
           <img id="image-preview" src="" alt="Preview">
-          <button type="button" id="remove-image-btn" class="btn-danger-sm" data-i18n="removeImage">Удалить картинку</button>
+          <button type="button" id="remove-image-btn" class="btn-danger-sm">Удалить картинку</button>
         </div>
 
-        <button type="submit" id="save-card-btn" class="btn primary" data-i18n="btnSave">Сохранить карточку</button>
+        <button type="submit" id="save-card-btn" class="btn primary">Сохранить карточку</button>
       </form>
     </div>
   </div>
