@@ -1,4 +1,4 @@
-// --- Переводы (i18n) ---
+// --- Переводы (i18n) без слова (необязательно) ---
 const i18n = {
   ru: {
     appTitle: "Flashcards App",
@@ -16,10 +16,10 @@ const i18n = {
     phWord: "Apple",
     lblTranslation: "Перевод:",
     phTranslation: "Яблоко",
-    lblDefinition: "Определение / Контекст (необязательно):",
+    lblDefinition: "Определение / Контекст:",
     phDefinition: "Сочный плод...",
     lblFolder: "Выберите папку:",
-    lblImage: "Изображение (необязательно):",
+    lblImage: "Изображение:",
     optFile: "С компьютера",
     optUrl: "По ссылке (URL)",
     removeImageBtn: "Удалить картинку",
@@ -55,10 +55,10 @@ const i18n = {
     phWord: "Apple",
     lblTranslation: "Translation:",
     phTranslation: "A round fruit",
-    lblDefinition: "Definition / Context (optional):",
+    lblDefinition: "Definition / Context:",
     phDefinition: "Context sentence...",
     lblFolder: "Select Folder:",
-    lblImage: "Image (optional):",
+    lblImage: "Image:",
     optFile: "From computer",
     optUrl: "Via URL link",
     removeImageBtn: "Remove Image",
@@ -94,10 +94,10 @@ const i18n = {
     phWord: "Apple",
     lblTranslation: "Překlad:",
     phTranslation: "Jablko",
-    lblDefinition: "Definice / Kontext (volitelné):",
+    lblDefinition: "Definice / Kontext:",
     phDefinition: "Příklad použití...",
     lblFolder: "Vyberte složku:",
-    lblImage: "Obrázek (volitelné):",
+    lblImage: "Obrázek:",
     optFile: "Z počítače",
     optUrl: "Odkazem (URL)",
     removeImageBtn: "Odbourat obrázek",
@@ -133,10 +133,10 @@ const i18n = {
     phWord: "Apple",
     lblTranslation: "Traducción:",
     phTranslation: "Manzana",
-    lblDefinition: "Definición / Contexto (opcional):",
+    lblDefinition: "Definición / Contexto:",
     phDefinition: "Frase de ejemplo...",
     lblFolder: "Seleccionar carpeta:",
-    lblImage: "Imagen (opcional):",
+    lblImage: "Imagen:",
     optFile: "Desde equipo",
     optUrl: "Por enlace URL",
     removeImageBtn: "Eliminar imagen",
@@ -172,10 +172,10 @@ const i18n = {
     phWord: "Apple",
     lblTranslation: "Çeviri:",
     phTranslation: "Elma",
-    lblDefinition: "Tanım / Bağlam (isteğe bağlı):",
+    lblDefinition: "Tanım / Bağlam:",
     phDefinition: "Örnek cümle...",
     lblFolder: "Klasör Seçin:",
-    lblImage: "Görsel (isteğe bağlı):",
+    lblImage: "Görsel:",
     optFile: "Bilgisayardan",
     optUrl: "URL Bağlantısıyla",
     removeImageBtn: "Görseli Kaldır",
@@ -268,13 +268,11 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
-// --- Сохранение в localStorage ---
 function saveData() {
   localStorage.setItem('flash_folders', JSON.stringify(folders));
   localStorage.setItem('flash_cards', JSON.stringify(cards));
 }
 
-// Переключение типа загрузки фото
 imageSourceRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (e.target.value === 'file') {
@@ -289,7 +287,6 @@ imageSourceRadios.forEach(radio => {
   });
 });
 
-// --- Перевод UI ---
 function updateStaticTexts() {
   const t = i18n[currentLang];
 
@@ -332,7 +329,6 @@ langSelect.onchange = (e) => {
   render();
 };
 
-// --- Рендер Папок ---
 function renderFolders() {
   const t = i18n[currentLang];
   foldersList.innerHTML = '';
@@ -366,7 +362,6 @@ function renderFolders() {
     foldersList.appendChild(li);
   });
 
-  // Селекты в формах
   folderSelect.innerHTML = '';
   studyFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
   exportFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
@@ -399,7 +394,6 @@ function deleteFolder(folderName) {
   render();
 }
 
-// --- Рендер Карточек ---
 function renderCards() {
   const t = i18n[currentLang];
   cardsGrid.innerHTML = '';
@@ -535,7 +529,7 @@ function convertImageToBase64(file) {
   });
 }
 
-// --- ИМПОРТ / ЭКСПОРТ (JSON) ---
+// Export / Import
 exportImportBtn.onclick = () => ioModal.classList.remove('hidden');
 closeIoBtn.onclick = () => ioModal.classList.add('hidden');
 
@@ -567,7 +561,6 @@ doImportBtn.onclick = () => {
     try {
       const importedData = JSON.parse(e.target.result);
       if (importedData.folders && importedData.cards) {
-        // Объединяем папки и карточки
         importedData.folders.forEach(f => {
           if (!folders.includes(f)) folders.push(f);
         });
@@ -592,7 +585,7 @@ doImportBtn.onclick = () => {
   reader.readAsText(file);
 };
 
-// --- СИНХРОНИЗАЦИЯ С GITHUB GIST ---
+// Sync Gist
 syncGistBtn.onclick = () => {
   gistTokenInput.value = localStorage.getItem('flash_gist_token') || '';
   gistIdInput.value = localStorage.getItem('flash_gist_id') || '';
@@ -601,7 +594,6 @@ syncGistBtn.onclick = () => {
 
 closeGistBtn.onclick = () => gistModal.classList.add('hidden');
 
-// Push в Gist
 gistPushBtn.onclick = async () => {
   const token = gistTokenInput.value.trim();
   let gistId = gistIdInput.value.trim();
@@ -655,7 +647,6 @@ gistPushBtn.onclick = async () => {
   }
 };
 
-// Pull из Gist
 gistPullBtn.onclick = async () => {
   const token = gistTokenInput.value.trim();
   const gistId = gistIdInput.value.trim();
@@ -687,7 +678,7 @@ gistPullBtn.onclick = async () => {
   }
 };
 
-// --- ТРЕНИРОВКА (STUDY MODE) ---
+// Study Mode
 studyModeBtn.onclick = () => {
   studySetupModal.classList.remove('hidden');
 };
@@ -727,15 +718,12 @@ function updateStudyCard() {
   flashcardBackLabel.textContent = t.cardBackLabel;
 
   if (studyCardMode === 'translation') {
-    // Слово ➔ Перевод
     flashcardFrontText.innerHTML = card.word;
     flashcardBackText.innerHTML = (card.translation && card.translation.trim() !== '') ? card.translation : '--';
   } else if (studyCardMode === 'definition') {
-    // Значение ➔ Слово (Поменяли местами!)
     flashcardFrontText.innerHTML = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
     flashcardBackText.innerHTML = card.word;
   } else if (studyCardMode === 'image') {
-    // Фото ➔ Слово
     if (card.image) {
       flashcardFrontText.innerHTML = `<img src="${card.image}" class="flashcard-img-preview" alt="Card Image">`;
     } else {
