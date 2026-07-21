@@ -9,15 +9,22 @@
 <body>
 
   <header>
-    <h2 id="i18n-app-title">Flashcards App</h2>
-    <div class="lang-selector">
-      <label for="lang-select"></label>
-      <select id="lang-select">
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-        <option value="cs">Čeština</option>
-        <option value="es">Español</option>
-      </select>
+    <h1 id="i18n-app-title">Flashcards App</h1>
+
+    <div class="header-right">
+      <!-- Кнопка перехода в режим проверки знаний -->
+      <button id="study-mode-btn" class="btn secondary"><span id="i18n-study-btn">Тренировка</span></button>
+
+      <!-- Выбор языка -->
+      <div class="lang-selector">
+        <select id="lang-select">
+          <option value="en">English</option>
+          <option value="ru">Русский</option>
+          <option value="cs">Čeština</option>
+          <option value="es">Español</option>
+          <option value="tr">Türkçe</option>
+        </select>
+      </div>
     </div>
   </header>
 
@@ -29,25 +36,18 @@
         <input type="text" id="new-folder-input" placeholder="Новая папка...">
         <button id="add-folder-btn">+</button>
       </div>
-      <ul id="folders-list">
-        <!-- Папки будут рендериться здесь -->
-      </ul>
+      <ul id="folders-list"></ul>
     </aside>
 
     <!-- Основной контент -->
     <section class="content">
-      <!-- Панель управления -->
       <div class="actions">
         <button id="open-modal-btn" class="btn primary">+ Создать карточку</button>
       </div>
 
-      <!-- Заголовок активной папки -->
       <h2 id="current-folder-title">Все карточки</h2>
 
-      <!-- Сетка карточек -->
-      <div id="cards-grid" class="cards-grid">
-        <!-- Карточки будут рендериться здесь -->
-      </div>
+      <div id="cards-grid" class="cards-grid"></div>
     </section>
   </main>
 
@@ -57,25 +57,29 @@
       <span id="close-modal-btn" class="close">&times;</span>
       <h2 id="modal-title">Новая карточка</h2>
       <form id="card-form">
-        <!-- Скрытое поле для ID карточки -->
         <input type="hidden" id="card-id-input">
 
-        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:*</label>
+        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:</label>
         <input type="text" id="word-input" required placeholder="Apple">
 
         <label for="translation-input" id="i18n-lbl-translation">Перевод:</label>
         <input type="text" id="translation-input" placeholder="Яблоко">
 
-        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст:</label>
-        <textarea id="definition-input" placeholder="A round fruit with red or green skin..."></textarea>
+        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст (необязательно):</label>
+        <textarea id="definition-input" placeholder="A round fruit..."></textarea>
 
         <label for="folder-select" id="i18n-lbl-folder">Выберите папку:</label>
         <select id="folder-select"></select>
 
-        <label for="image-input" id="i18n-lbl-image">Изображение:</label>
-        <input type="file" id="image-input" accept="image/*">
+        <label id="i18n-lbl-image">Изображение (необязательно):</label>
+        <div class="image-source-options">
+          <label><input type="radio" name="image-source" value="file" checked> <span id="i18n-opt-file">С компьютера</span></label>
+          <label><input type="radio" name="image-source" value="url"> <span id="i18n-opt-url">По ссылке (URL)</span></label>
+        </div>
 
-        <!-- Превью изображения при редактировании -->
+        <input type="file" id="image-input" accept="image/*">
+        <input type="url" id="image-url-input" class="hidden" placeholder="https://example.com/image.jpg">
+
         <div id="image-preview-container" class="hidden">
           <img id="image-preview" src="" alt="Preview">
           <button type="button" id="remove-image-btn" class="btn-danger-sm">Удалить картинку</button>
@@ -83,6 +87,57 @@
 
         <button type="submit" id="save-card-btn" class="btn primary">Сохранить карточку</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно настройки Тренировки -->
+  <div id="study-setup-modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-study-setup-btn" class="close">&times;</span>
+      <h2 id="i18n-study-setup-title">Настройка тренировки</h2>
+
+      <div class="form-group">
+        <label for="study-folder-select" id="i18n-study-lbl-folder">Выберите папку:</label>
+        <select id="study-folder-select"></select>
+      </div>
+
+      <div class="form-group">
+        <label id="i18n-study-lbl-mode">Режим карточки:</label>
+        <div class="radio-group">
+          <label><input type="radio" name="study-mode-type" value="translation" checked> <span id="i18n-mode-trans">Слово ➔ Перевод</span></label>
+          <label><input type="radio" name="study-mode-type" value="definition"> <span id="i18n-mode-def">Слово ➔ Определение</span></label>
+        </div>
+      </div>
+
+      <button id="start-study-btn" class="btn primary" style="width: 100%; margin-top: 1rem;">OK</button>
+    </div>
+  </div>
+
+  <!-- Окно самой Тренировки (Flashcards Viewer) -->
+  <div id="study-viewer-modal" class="modal hidden">
+    <div class="modal-content study-viewer-content">
+      <span id="close-study-viewer-btn" class="close">&times;</span>
+
+      <div class="study-progress" id="study-progress-text">1 / 10</div>
+
+      <!-- Виртуальная карточка с 3D-переворотом -->
+      <div class="flashcard-3d" id="flashcard-3d">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="card-side-label" id="i18n-card-front-label">Слово</span>
+            <div class="flashcard-text" id="flashcard-front-text">---</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="card-side-label" id="flashcard-back-label">Перевод</span>
+            <div class="flashcard-text" id="flashcard-back-text">---</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-nav">
+        <button id="prev-card-btn" class="btn secondary"><-</button>
+        <button id="next-card-btn" class="btn secondary">-></button>
+      </div>
     </div>
   </div>
 
