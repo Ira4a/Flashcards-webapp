@@ -1,5 +1,5 @@
-// --- Переводы интерфейса (i18n) ---
-const translations = {
+// --- Переводы интерфейса ---
+const i18n = {
   ru: {
     appTitle: "🎴 Flashcards App",
     folders: "Папки",
@@ -8,7 +8,7 @@ const translations = {
     allFolder: "📂 Все карточки",
     mainFolder: "Основная",
     folderPrefix: "Папка: ",
-    createCard: "+ Создать карточку",
+    createCardBtn: "+ Создать карточку",
     noCards: "В этой папке пока нет карточек.",
     modalTitleNew: "Новая карточка",
     modalTitleEdit: "Редактировать карточку",
@@ -17,12 +17,12 @@ const translations = {
     lblTranslation: "Перевод:",
     phTranslation: "Например: Яблоко",
     lblDefinition: "Определение / Контекст (необязательно):",
-    phDefinition: "A round fruit with red or green skin...",
-    lblSelectFolder: "Выберите папку:",
+    phDefinition: "Контекст или пример применения...",
+    lblFolder: "Выберите папку:",
     lblImage: "Изображение (необязательно):",
-    removeImage: "Удалить картинку",
-    btnSave: "Сохранить карточку",
-    confirmDeleteFolder: 'Удалить папку "{folder}"?\nКарточки из этой папки будут перемещены в папку "{main}".'
+    removeImageBtn: "Удалить картинку",
+    saveCardBtn: "Сохранить карточку",
+    confirmDeleteFolder: 'Удалить папку "{folder}"?\nВсе карточки перейдут в папку "{main}".'
   },
   en: {
     appTitle: "🎴 Flashcards App",
@@ -32,7 +32,7 @@ const translations = {
     allFolder: "📂 All Flashcards",
     mainFolder: "General",
     folderPrefix: "Folder: ",
-    createCard: "+ Add Flashcard",
+    createCardBtn: "+ Add Flashcard",
     noCards: "No flashcards in this folder yet.",
     modalTitleNew: "New Flashcard",
     modalTitleEdit: "Edit Flashcard",
@@ -41,12 +41,12 @@ const translations = {
     lblTranslation: "Translation:",
     phTranslation: "E.g., Яблоко",
     lblDefinition: "Definition / Context (optional):",
-    phDefinition: "A round fruit with red or green skin...",
-    lblSelectFolder: "Select Folder:",
+    phDefinition: "Context or example sentence...",
+    lblFolder: "Select Folder:",
     lblImage: "Image (optional):",
-    removeImage: "Remove Image",
-    btnSave: "Save Flashcard",
-    confirmDeleteFolder: 'Delete folder "{folder}"?\nCards from this folder will be moved to "{main}".'
+    removeImageBtn: "Remove Image",
+    saveCardBtn: "Save Flashcard",
+    confirmDeleteFolder: 'Delete folder "{folder}"?\nAll cards will move to "{main}".'
   },
   cs: {
     appTitle: "🎴 Kartičky App",
@@ -56,7 +56,7 @@ const translations = {
     allFolder: "📂 Všechny kartičky",
     mainFolder: "Hlavní",
     folderPrefix: "Složka: ",
-    createCard: "+ Přidat kartičku",
+    createCardBtn: "+ Přidat kartičku",
     noCards: "V této složce zatím nejsou žádné kartičky.",
     modalTitleNew: "Nová kartička",
     modalTitleEdit: "Upravit kartičku",
@@ -65,12 +65,12 @@ const translations = {
     lblTranslation: "Překlad:",
     phTranslation: "Např. Jablko",
     lblDefinition: "Definice / Kontext (volitelné):",
-    phDefinition: "A round fruit with red or green skin...",
-    lblSelectFolder: "Vyberte složku:",
+    phDefinition: "Kontext nebo příklad použití...",
+    lblFolder: "Vyberte složku:",
     lblImage: "Obrázek (volitelné):",
-    removeImage: "Odbourat obrázek",
-    btnSave: "Uložit kartičku",
-    confirmDeleteFolder: 'Smazat složku "{folder}"?\nKartičky из этой složky будут přesunuty do "{main}".'
+    removeImageBtn: "Odbourat obrázek",
+    saveCardBtn: "Uložit kartičku",
+    confirmDeleteFolder: 'Smazat složku "{folder}"?\nVšechny kartičky se přesunou do "{main}".'
   },
   es: {
     appTitle: "🎴 Tarjetas App",
@@ -80,7 +80,7 @@ const translations = {
     allFolder: "📂 Todas las tarjetas",
     mainFolder: "Principal",
     folderPrefix: "Carpeta: ",
-    createCard: "+ Crear tarjeta",
+    createCardBtn: "+ Crear tarjeta",
     noCards: "Aún no hay tarjetas en esta carpeta.",
     modalTitleNew: "Nueva tarjeta",
     modalTitleEdit: "Editar tarjeta",
@@ -89,21 +89,21 @@ const translations = {
     lblTranslation: "Traducción:",
     phTranslation: "Ej. Manzana",
     lblDefinition: "Definición / Contexto (opcional):",
-    phDefinition: "A round fruit with red or green skin...",
-    lblSelectFolder: "Seleccionar carpeta:",
+    phDefinition: "Contexto o frase de ejemplo...",
+    lblFolder: "Seleccionar carpeta:",
     lblImage: "Imagen (opcional):",
-    removeImage: "Eliminar imagen",
-    btnSave: "Guardar tarjeta",
-    confirmDeleteFolder: '¿Eliminar la carpeta "{folder}"?\nLas tarjetas se moverán a "{main}".'
+    removeImageBtn: "Eliminar imagen",
+    saveCardBtn: "Guardar tarjeta",
+    confirmDeleteFolder: '¿Eliminar la carpeta "{folder}"?\nTodas las tarjetas se moverán a "{main}".'
   }
 };
 
 // --- Инициализация состояния ---
 let currentLang = localStorage.getItem('flash_lang') || 'ru';
-let folders = JSON.parse(localStorage.getItem('flash_folders')) || [translations[currentLang].mainFolder];
+let folders = JSON.parse(localStorage.getItem('flash_folders')) || [i18n[currentLang].mainFolder];
 let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
 let activeFolder = 'Все';
-let editingCardImage = null; // Хранит base64 изображения при редактировании
+let editingCardImage = null;
 
 // --- Элементы DOM ---
 const langSelect = document.getElementById('lang-select');
@@ -125,33 +125,40 @@ const imagePreviewContainer = document.getElementById('image-preview-container')
 const imagePreview = document.getElementById('image-preview');
 const removeImageBtn = document.getElementById('remove-image-btn');
 
-// Установка начального языка
 langSelect.value = currentLang;
+
+// --- Обновление текстов интерфейса ---
+function updateStaticTexts() {
+  const t = i18n[currentLang];
+
+  document.getElementById('i18n-app-title').textContent = t.appTitle;
+  document.getElementById('i18n-folders').textContent = t.folders;
+  newFolderInput.placeholder = t.newFolderPh;
+  openModalBtn.textContent = t.createCardBtn;
+
+  document.getElementById('i18n-lbl-word').textContent = t.lblWord;
+  document.getElementById('word-input').placeholder = t.phWord;
+
+  document.getElementById('i18n-lbl-translation').textContent = t.lblTranslation;
+  document.getElementById('translation-input').placeholder = t.phTranslation;
+
+  document.getElementById('i18n-lbl-definition').textContent = t.lblDefinition;
+  document.getElementById('definition-input').placeholder = t.phDefinition;
+
+  document.getElementById('i18n-lbl-folder').textContent = t.lblFolder;
+  document.getElementById('i18n-lbl-image').textContent = t.lblImage;
+
+  removeImageBtn.textContent = t.removeImageBtn;
+  document.getElementById('save-card-btn').textContent = t.saveCardBtn;
+}
 
 // --- Переключение языка ---
 langSelect.onchange = (e) => {
   currentLang = e.target.value;
   localStorage.setItem('flash_lang', currentLang);
-  updateUI();
-};
-
-function updateUI() {
-  const t = translations[currentLang];
-
-  // Перевод текстовых блоков с атрибутом data-i18n
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key]) el.textContent = t[key];
-  });
-
-  // Перевод плейсхолдеров с атрибутом data-i18n-ph
-  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-    const key = el.getAttribute('data-i18n-ph');
-    if (t[key]) el.placeholder = t[key];
-  });
-
+  updateStaticTexts();
   render();
-}
+};
 
 // --- Сохранение в localStorage ---
 function saveData() {
@@ -161,7 +168,7 @@ function saveData() {
 
 // --- Рендер списка папок ---
 function renderFolders() {
-  const t = translations[currentLang];
+  const t = i18n[currentLang];
   foldersList.innerHTML = '';
 
   // Пункт "Все карточки"
@@ -181,12 +188,11 @@ function renderFolders() {
     folderTitle.onclick = () => { activeFolder = folder; render(); };
     li.appendChild(folderTitle);
 
-    // Кнопка удаления (не разрешаем для первой основной папки)
+    // Кнопка удаления (первую папку удалить нельзя)
     if (folder !== folders[0]) {
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'delete-folder-btn';
       deleteBtn.innerHTML = '&times;';
-      deleteBtn.title = 'Удалить папку';
       deleteBtn.onclick = (e) => {
         e.stopPropagation();
         deleteFolder(folder);
@@ -197,7 +203,7 @@ function renderFolders() {
     foldersList.appendChild(li);
   });
 
-  // Обновляем селект выбора папки в форме
+  // Селект в форме
   folderSelect.innerHTML = '';
   folders.forEach(folder => {
     const option = document.createElement('option');
@@ -209,7 +215,7 @@ function renderFolders() {
 
 // --- Удаление папки ---
 function deleteFolder(folderName) {
-  const t = translations[currentLang];
+  const t = i18n[currentLang];
   const mainFolderName = folders[0];
   const confirmMsg = t.confirmDeleteFolder
     .replace('{folder}', folderName)
@@ -228,7 +234,7 @@ function deleteFolder(folderName) {
 
 // --- Рендер карточек ---
 function renderCards() {
-  const t = translations[currentLang];
+  const t = i18n[currentLang];
   cardsGrid.innerHTML = '';
   currentFolderTitle.textContent = activeFolder === 'Все' ? t.allCards : `${t.folderPrefix}${activeFolder}`;
 
@@ -245,27 +251,39 @@ function renderCards() {
     const cardEl = document.createElement('div');
     cardEl.className = 'card';
     cardEl.innerHTML = `
-      <button class="delete-card-btn" onclick="deleteCard(event, '${card.id}')">&times;</button>
+      <button class="delete-card-btn" data-id="${card.id}">&times;</button>
       ${card.image ? `<img src="${card.image}" alt="${card.word}">` : ''}
       <div class="word">${card.word}</div>
       <div class="translation">${card.translation}</div>
       ${card.definition ? `<div class="definition">${card.definition}</div>` : ''}
     `;
 
-    // Клик по всей карточке вызывает редактирование
-    cardEl.onclick = () => openEditModal(card);
+    // Клик по всей карточке для редактирования
+    cardEl.addEventListener('click', (e) => {
+      // Если кликнули по крестику удаления — не открываем редактирование
+      if (e.target.classList.contains('delete-card-btn')) {
+        return;
+      }
+      openEditModal(card);
+    });
+
+    // Обработчик удаления карточки
+    const delBtn = cardEl.querySelector('.delete-card-btn');
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteCard(card.id);
+    });
 
     cardsGrid.appendChild(cardEl);
   });
 }
 
 // --- Удаление карточки ---
-window.deleteCard = (e, id) => {
-  e.stopPropagation(); // Предотвращаем открытие модалки редактирования при клике на крестик
+function deleteCard(id) {
   cards = cards.filter(card => card.id !== id);
   saveData();
   render();
-};
+}
 
 // --- Добавление новой папки ---
 addFolderBtn.onclick = () => {
@@ -278,20 +296,19 @@ addFolderBtn.onclick = () => {
   }
 };
 
-// --- Открытие модалки создания ---
+// --- Открытие модалки (Создание) ---
 openModalBtn.onclick = () => {
   cardForm.reset();
   cardIdInput.value = '';
   editingCardImage = null;
   imagePreviewContainer.classList.add('hidden');
-  modalTitle.textContent = translations[currentLang].modalTitleNew;
+  modalTitle.textContent = i18n[currentLang].modalTitleNew;
   
-  // По умолчанию выбираем текущую активную папку (если это не "Все")
   folderSelect.value = (activeFolder !== 'Все' && folders.includes(activeFolder)) ? activeFolder : folders[0];
   modal.classList.remove('hidden');
 };
 
-// --- Открытие модалки редактирования ---
+// --- Открытие модалки (Редактирование) ---
 function openEditModal(card) {
   cardIdInput.value = card.id;
   document.getElementById('word-input').value = card.word;
@@ -307,22 +324,22 @@ function openEditModal(card) {
     imagePreviewContainer.classList.add('hidden');
   }
 
-  imageInput.value = ''; // сброс инпута файла
-  modalTitle.textContent = translations[currentLang].modalTitleEdit;
+  imageInput.value = '';
+  modalTitle.textContent = i18n[currentLang].modalTitleEdit;
   modal.classList.remove('hidden');
 }
 
-// --- Удаление картинки из редактируемой карточки ---
+// --- Удаление картинки при редактировании ---
 removeImageBtn.onclick = () => {
   editingCardImage = null;
   imageInput.value = '';
   imagePreviewContainer.classList.add('hidden');
 };
 
-// --- Закрытие модального окна ---
+// --- Закрытие модалки ---
 closeModalBtn.onclick = () => modal.classList.add('hidden');
 
-// --- Обработка отправки формы (Создание / Редактирование) ---
+// --- Отправка формы (Создание / Редактирование) ---
 cardForm.onsubmit = async (e) => {
   e.preventDefault();
 
@@ -334,16 +351,15 @@ cardForm.onsubmit = async (e) => {
 
   let imageBase64 = editingCardImage;
 
-  // Если выбран новый файл изображения
   if (imageInput.files && imageInput.files[0]) {
     imageBase64 = await convertImageToBase64(imageInput.files[0]);
   }
 
   if (id) {
-    // Редактирование существующей карточки
+    // Обновляем существующую карточку
     cards = cards.map(c => c.id === id ? { ...c, word, translation, definition, folder, image: imageBase64 } : c);
   } else {
-    // Создание новой карточки
+    // Добавляем новую
     const newCard = {
       id: Date.now().toString(),
       word,
@@ -369,11 +385,12 @@ function convertImageToBase64(file) {
   });
 }
 
-// --- Общий рендер ---
+// --- Полный рендер ---
 function render() {
   renderFolders();
   renderCards();
 }
 
-// Старт приложения с обновлением UI под текущий язык
-updateUI();
+// Старт приложения
+updateStaticTexts();
+render();
