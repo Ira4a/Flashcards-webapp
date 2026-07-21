@@ -60,21 +60,19 @@
         <!-- Скрытое поле для ID карточки -->
         <input type="hidden" id="card-id-input">
 
-        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:</label>
+        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:*</label>
         <input type="text" id="word-input" required placeholder="Apple">
 
         <label for="translation-input" id="i18n-lbl-translation">Перевод:</label>
         <input type="text" id="translation-input" placeholder="Яблоко">
 
-        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст (необязательно):</label>
+        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст:</label>
         <textarea id="definition-input" placeholder="A round fruit with red or green skin..."></textarea>
 
         <label for="folder-select" id="i18n-lbl-folder">Выберите папку:</label>
-        <select id="folder-select">
-          <!-- Опции подгрузятся динамически -->
-        </select>
+        <select id="folder-select"></select>
 
-        <label for="image-input" id="i18n-lbl-image">Изображение (необязательно):</label>
+        <label for="image-input" id="i18n-lbl-image">Изображение:</label>
         <input type="file" id="image-input" accept="image/*">
 
         <!-- Превью изображения при редактировании -->
