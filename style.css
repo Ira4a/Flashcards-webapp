@@ -241,23 +241,29 @@ header {
   margin-top: 0.4rem;
 }
 
-#image-preview {
-  width: 100%;
-  max-width: 100%;
-  max-height: 120px; /* Ограничиваем высоту превью */
-  object-fit: contain; /* Картинка полностью помещается без искажений */
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background-color: #f9fafb;
-  margin-top: 0.5rem;
-}
-
+/* Контейнер для превью изображения */
 #image-preview-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f9fafb;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+/* Строгое ограничение размера самого изображения */
+#image-preview {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 120px !important; /* Ограничиваем высоту до 120px */
+  object-fit: contain !important;
+  border-radius: 6px;
+  display: block;
 }
 
 .modal {
