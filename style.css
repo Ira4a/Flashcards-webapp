@@ -241,7 +241,6 @@ header {
   margin-top: 0.4rem;
 }
 
-/* Контейнер для превью изображения */
 #image-preview-container {
   display: flex;
   flex-direction: column;
@@ -255,12 +254,11 @@ header {
   border-radius: 8px;
 }
 
-/* Строгое ограничение размера самого изображения */
 #image-preview {
   width: auto !important;
   height: auto !important;
   max-width: 100% !important;
-  max-height: 120px !important; /* Ограничиваем высоту до 120px */
+  max-height: 120px !important; 
   object-fit: contain !important;
   border-radius: 6px;
   display: block;
@@ -443,6 +441,7 @@ input[type="file"]::file-selector-button {
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   overflow-y: auto;
+  text-align: center;
 }
 
 .flashcard-back {
@@ -467,6 +466,7 @@ input[type="file"]::file-selector-button {
   word-break: break-word;
   text-align: justify;
   width: 100%;
+  text-align: center;
 }
 
 .flashcard-img-preview {
@@ -474,6 +474,7 @@ input[type="file"]::file-selector-button {
   max-height: 180px;
   object-fit: contain;
   border-radius: 8px;
+  text-align: center;
 }
 
 .study-nav {
