@@ -12,12 +12,10 @@
     <h1 id="i18n-app-title">Flashcards App</h1>
 
     <div class="header-right">
-      <!-- Иконки/Кнопки Синхронизации и Экспорта/Импорта -->
       <button id="sync-gist-btn" class="btn icon-btn" title="GitHub Gist Sync"><span class="btn-text">Sync</span></button>
       <button id="export-import-btn" class="btn icon-btn" title="Export / Import"><span class="btn-text">Export/Import</span></button>
       <button id="study-mode-btn" class="btn secondary"><span id="i18n-study-btn">Flashcards</span></button>
 
-      <!-- Выбор языка -->
       <div class="lang-selector">
         <select id="lang-select">
           <option value="en">English</option>
@@ -31,7 +29,6 @@
   </header>
 
   <main class="container">
-    <!-- Боковая панель с папками -->
     <aside class="sidebar">
       <h2 id="i18n-folders">Папки</h2>
       <div class="folder-controls">
@@ -41,7 +38,6 @@
       <ul id="folders-list"></ul>
     </aside>
 
-    <!-- Основной контент -->
     <section class="content">
       <div class="actions">
         <button id="open-modal-btn" class="btn primary">+ Создать карточку</button>
@@ -61,7 +57,7 @@
       <form id="card-form">
         <input type="hidden" id="card-id-input">
 
-        <label for="word-input" id="i18n-lbl-word">Слово / Фраза:*</label>
+        <label for="word-input" id="i18n-lbl-word">Слово / Фраза: *</label>
         <input type="text" id="word-input" required placeholder="Apple">
 
         <label for="translation-input" id="i18n-lbl-translation">Перевод:</label>
@@ -92,30 +88,28 @@
     </div>
   </div>
 
-  <!-- Модальное окно Экспорта / Импорта -->
+  <!-- Обновленное модальное окно Экспорта / Импорта -->
   <div id="io-modal" class="modal hidden">
-    <div class="modal-content">
+    <div class="modal-content io-modal-content">
       <span id="close-io-btn" class="close">&times;</span>
-      <h2 id="i18n-io-title">Экспорт / Импорт</h2>
+      <h2 id="i18n-io-title" style="margin-bottom: 1.2rem;">Экспорт / Импорт</h2>
 
-      <div class="io-section">
+      <div class="io-card">
         <h3 id="i18n-export-title">Экспорт</h3>
         <div class="form-group">
           <label for="export-folder-select" id="i18n-export-lbl">Выберите папку для экспорта:</label>
           <select id="export-folder-select"></select>
         </div>
-        <button id="do-export-btn" class="btn primary">Скачать JSON</button>
+        <button id="do-export-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Скачать JSON</button>
       </div>
 
-      <hr class="divider">
-
-      <div class="io-section">
-        <h3 id="i18n-import-title">📥 Импорт</h3>
+      <div class="io-card" style="margin-top: 1rem;">
+        <h3 id="i18n-import-title">Импорт</h3>
         <div class="form-group">
           <label id="i18n-import-lbl">Выберите файл .json:</label>
           <input type="file" id="import-file-input" accept=".json">
         </div>
-        <button id="do-import-btn" class="btn primary">Загрузить данные</button>
+        <button id="do-import-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Загрузить данные</button>
       </div>
     </div>
   </div>
@@ -124,8 +118,8 @@
   <div id="gist-modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-gist-btn" class="close">&times;</span>
-      <h2>GitHub Gist Sync</h2>
-      <p class="gist-desc">Синхронизируйте свои карточки с персональным GitHub Gist для доступа с любых устройств.</p>
+      <h2>⚡ GitHub Gist Sync</h2>
+      <p class="gist-desc">Синхронизируйте карточки с GitHub Gist для доступа с любого устройства.</p>
       
       <div class="form-group">
         <label for="gist-token-input">GitHub Access Token:</label>
@@ -133,13 +127,13 @@
       </div>
 
       <div class="form-group">
-        <label for="gist-id-input">Gist ID (необязательно, создастся автоматически):</label>
+        <label for="gist-id-input">Gist ID (создастся автоматически):</label>
         <input type="text" id="gist-id-input" placeholder="4b3f8a...">
       </div>
 
       <div class="gist-actions">
-        <button id="gist-push-btn" class="btn primary">Загрузить в Gist (Push)</button>
-        <button id="gist-pull-btn" class="btn secondary">Скачать из Gist (Pull)</button>
+        <button id="gist-push-btn" class="btn primary">Загрузить (Push)</button>
+        <button id="gist-pull-btn" class="btn secondary">Скачать (Pull)</button>
       </div>
     </div>
   </div>
@@ -156,19 +150,28 @@
       </div>
 
       <div class="form-group">
-        <label id="i18n-study-lbl-mode">Режим карточки:</label>
-        <div class="radio-group">
-          <label><input type="radio" name="study-mode-type" value="translation" checked> <span id="i18n-mode-trans">Слово ➔ Перевод</span></label>
-          <label><input type="radio" name="study-mode-type" value="definition"> <span id="i18n-mode-def">Значение ➔ Слово</span></label>
-          <label><input type="radio" name="study-mode-type" value="image"> <span id="i18n-mode-img">Фото ➔ Слово</span></label>
+        <label id="i18n-study-lbl-mode" style="margin-bottom: 0.5rem;">Режим карточки:</label>
+        <div class="radio-group-vertical">
+          <label class="mode-radio-card">
+            <input type="radio" name="study-mode-type" value="translation" checked> 
+            <span id="i18n-mode-trans">Слово ➔ Перевод</span>
+          </label>
+          <label class="mode-radio-card">
+            <input type="radio" name="study-mode-type" value="definition"> 
+            <span id="i18n-mode-def">Значение ➔ Слово</span>
+          </label>
+          <label class="mode-radio-card">
+            <input type="radio" name="study-mode-type" value="image"> 
+            <span id="i18n-mode-img">Фото ➔ Слово</span>
+          </label>
         </div>
       </div>
 
-      <button id="start-study-btn" class="btn primary" style="width: 100%; margin-top: 1rem;">OK</button>
+      <button id="start-study-btn" class="btn primary" style="width: 100%; margin-top: 1.2rem;">OK</button>
     </div>
   </div>
 
-  <!-- Окно самой Тренировки (Flashcards Viewer) -->
+  <!-- Flashcards Viewer -->
   <div id="study-viewer-modal" class="modal hidden">
     <div class="modal-content study-viewer-content">
       <span id="close-study-viewer-btn" class="close">&times;</span>
