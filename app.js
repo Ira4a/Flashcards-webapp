@@ -1,4 +1,4 @@
-// --- Переводы (i18n) с добавленным ТУРЕЦКИМ языком ---
+// --- Переводы (i18n) ---
 const i18n = {
   ru: {
     appTitle: "Flashcards App",
@@ -25,15 +25,19 @@ const i18n = {
     removeImageBtn: "Удалить картинку",
     saveCardBtn: "Сохранить карточку",
     confirmDeleteFolder: 'Удалить папку "{folder}"?\nКарточки перейдут в "{main}".',
-    studyBtn: "Тренировка",
+    studyBtn: "Flashcards",
     studySetupTitle: "Настройка тренировки",
     studyLblFolder: "Выберите папку:",
     studyLblMode: "Режим карточки:",
     modeTrans: "Слово ➔ Перевод",
-    modeDef: "Слово ➔ Определение",
-    cardFrontLabel: "Слово / Фраза",
-    cardBackTransLabel: "Перевод",
-    cardBackDefLabel: "Определение"
+    modeDef: "Значение ➔ Слово",
+    modeImg: "Фото ➔ Слово",
+    cardFrontLabel: "Лицевая сторона",
+    cardBackLabel: "Обратная сторона",
+    exportTitle: "Экспорт",
+    importTitle: "Импорт",
+    exportLbl: "Выберите папку для экспорта:",
+    importLbl: "Выберите файл .json:"
   },
   en: {
     appTitle: "Flashcards App",
@@ -65,10 +69,14 @@ const i18n = {
     studyLblFolder: "Select Folder:",
     studyLblMode: "Flashcard Mode:",
     modeTrans: "Word ➔ Translation",
-    modeDef: "Word ➔ Definition",
-    cardFrontLabel: "Word / Phrase",
-    cardBackTransLabel: "Translation",
-    cardBackDefLabel: "Definition"
+    modeDef: "Meaning ➔ Word",
+    modeImg: "Photo ➔ Word",
+    cardFrontLabel: "Front Side",
+    cardBackLabel: "Back Side",
+    exportTitle: "Export",
+    importTitle: "Import",
+    exportLbl: "Select folder to export:",
+    importLbl: "Select .json file:"
   },
   cs: {
     appTitle: "Kartičky App",
@@ -95,15 +103,19 @@ const i18n = {
     removeImageBtn: "Odbourat obrázek",
     saveCardBtn: "Uložit kartičku",
     confirmDeleteFolder: 'Smazat složku "{folder}"?\nKartičky se přesunou do "{main}".',
-    studyBtn: "Trénink",
+    studyBtn: "Flashcards",
     studySetupTitle: "Nastavení tréninku",
     studyLblFolder: "Vyberte složku:",
     studyLblMode: "Režim kartičky:",
     modeTrans: "Slovo ➔ Překlad",
-    modeDef: "Slovo ➔ Definice",
-    cardFrontLabel: "Slovo / Fráze",
-    cardBackTransLabel: "Překlad",
-    cardBackDefLabel: "Definice"
+    modeDef: "Význam ➔ Slovo",
+    modeImg: "Fotka ➔ Slovo",
+    cardFrontLabel: "Přední strana",
+    cardBackLabel: "Zadní strana",
+    exportTitle: "Export",
+    importTitle: "Import",
+    exportLbl: "Vyberte složku pro export:",
+    importLbl: "Vyberte soubor .json:"
   },
   es: {
     appTitle: "Tarjetas App",
@@ -130,15 +142,19 @@ const i18n = {
     removeImageBtn: "Eliminar imagen",
     saveCardBtn: "Guardar tarjeta",
     confirmDeleteFolder: '¿Eliminar la carpeta "{folder}"?\nSe moverán a "{main}".',
-    studyBtn: "Estudiar",
+    studyBtn: "Flashcards",
     studySetupTitle: "Configurar Estudio",
     studyLblFolder: "Seleccionar carpeta:",
     studyLblMode: "Modo de tarjeta:",
     modeTrans: "Palabra ➔ Traducción",
-    modeDef: "Palabra ➔ Definición",
-    cardFrontLabel: "Palabra / Frase",
-    cardBackTransLabel: "Traducción",
-    cardBackDefLabel: "Definición"
+    modeDef: "Significado ➔ Palabra",
+    modeImg: "Foto ➔ Palabra",
+    cardFrontLabel: "Cara frontal",
+    cardBackLabel: "Cara trasera",
+    exportTitle: "Exportar",
+    importTitle: "Importar",
+    exportLbl: "Seleccionar carpeta para exportar:",
+    importLbl: "Seleccionar archivo .json:"
   },
   tr: {
     appTitle: "Flashcards App",
@@ -165,15 +181,19 @@ const i18n = {
     removeImageBtn: "Görseli Kaldır",
     saveCardBtn: "Karti Kaydet",
     confirmDeleteFolder: '"{folder}" klasörü silinsin mi?\nKartlar "{main}" klasörüne taşınacak.',
-    studyBtn: "Alıştırma",
+    studyBtn: "Flashcards",
     studySetupTitle: "Alıştırma Ayarları",
     studyLblFolder: "Klasör Seçin:",
     studyLblMode: "Kart Modu:",
     modeTrans: "Kelime ➔ Çeviri",
-    modeDef: "Kelime ➔ Tanım",
-    cardFrontLabel: "Kelime / İfade",
-    cardBackTransLabel: "Çeviri",
-    cardBackDefLabel: "Tanım"
+    modeDef: "Anlam ➔ Kelime",
+    modeImg: "Fotoğraf ➔ Kelime",
+    cardFrontLabel: "Ön Yüz",
+    cardBackLabel: "Arka Yüz",
+    exportTitle: "Dışa Aktar",
+    importTitle: "İçe Aktar",
+    exportLbl: "Dışa aktarılacak klasörü seçin:",
+    importLbl: ".json dosyasını seçin:"
   }
 };
 
@@ -184,10 +204,9 @@ let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
 let activeFolder = 'Все';
 let editingCardImage = null;
 
-// Переменные режима тренировки
 let studyCardsList = [];
 let studyCurrentIndex = 0;
-let studyCardMode = 'translation'; // 'translation' или 'definition'
+let studyCardMode = 'translation';
 
 // DOM элементы
 const langSelect = document.getElementById('lang-select');
@@ -211,7 +230,25 @@ const imagePreview = document.getElementById('image-preview');
 const removeImageBtn = document.getElementById('remove-image-btn');
 const imageSourceRadios = document.querySelectorAll('input[name="image-source"]');
 
-// Элементы модалок Тренировки
+// Export/Import Modal DOM
+const exportImportBtn = document.getElementById('export-import-btn');
+const ioModal = document.getElementById('io-modal');
+const closeIoBtn = document.getElementById('close-io-btn');
+const exportFolderSelect = document.getElementById('export-folder-select');
+const doExportBtn = document.getElementById('do-export-btn');
+const importFileInput = document.getElementById('import-file-input');
+const doImportBtn = document.getElementById('do-import-btn');
+
+// GitHub Gist Modal DOM
+const syncGistBtn = document.getElementById('sync-gist-btn');
+const gistModal = document.getElementById('gist-modal');
+const closeGistBtn = document.getElementById('close-gist-btn');
+const gistTokenInput = document.getElementById('gist-token-input');
+const gistIdInput = document.getElementById('gist-id-input');
+const gistPushBtn = document.getElementById('gist-push-btn');
+const gistPullBtn = document.getElementById('gist-pull-btn');
+
+// Study Mode DOM
 const studyModeBtn = document.getElementById('study-mode-btn');
 const studySetupModal = document.getElementById('study-setup-modal');
 const closeStudySetupBtn = document.getElementById('close-study-setup-btn');
@@ -223,6 +260,7 @@ const closeStudyViewerBtn = document.getElementById('close-study-viewer-btn');
 const flashcard3d = document.getElementById('flashcard-3d');
 const flashcardFrontText = document.getElementById('flashcard-front-text');
 const flashcardBackText = document.getElementById('flashcard-back-text');
+const flashcardFrontLabel = document.getElementById('flashcard-front-label');
 const flashcardBackLabel = document.getElementById('flashcard-back-label');
 const studyProgressText = document.getElementById('study-progress-text');
 const prevCardBtn = document.getElementById('prev-card-btn');
@@ -230,7 +268,13 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
-// --- Переключение радио закрузки изображений ---
+// --- Сохранение в localStorage ---
+function saveData() {
+  localStorage.setItem('flash_folders', JSON.stringify(folders));
+  localStorage.setItem('flash_cards', JSON.stringify(cards));
+}
+
+// Переключение типа загрузки фото
 imageSourceRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (e.target.value === 'file') {
@@ -273,7 +317,12 @@ function updateStaticTexts() {
   document.getElementById('i18n-study-lbl-mode').textContent = t.studyLblMode;
   document.getElementById('i18n-mode-trans').textContent = t.modeTrans;
   document.getElementById('i18n-mode-def').textContent = t.modeDef;
-  document.getElementById('i18n-card-front-label').textContent = t.cardFrontLabel;
+  document.getElementById('i18n-mode-img').textContent = t.modeImg;
+
+  document.getElementById('i18n-export-title').textContent = t.exportTitle;
+  document.getElementById('i18n-import-title').textContent = t.importTitle;
+  document.getElementById('i18n-export-lbl').textContent = t.exportLbl;
+  document.getElementById('i18n-import-lbl').textContent = t.importLbl;
 }
 
 langSelect.onchange = (e) => {
@@ -282,11 +331,6 @@ langSelect.onchange = (e) => {
   updateStaticTexts();
   render();
 };
-
-function saveData() {
-  localStorage.setItem('flash_folders', JSON.stringify(folders));
-  localStorage.setItem('flash_cards', JSON.stringify(cards));
-}
 
 // --- Рендер Папок ---
 function renderFolders() {
@@ -325,6 +369,8 @@ function renderFolders() {
   // Селекты в формах
   folderSelect.innerHTML = '';
   studyFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
+  exportFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
+
   folders.forEach(folder => {
     const opt1 = document.createElement('option');
     opt1.value = folder; opt1.textContent = folder;
@@ -333,6 +379,10 @@ function renderFolders() {
     const opt2 = document.createElement('option');
     opt2.value = folder; opt2.textContent = folder;
     studyFolderSelect.appendChild(opt2);
+
+    const opt3 = document.createElement('option');
+    opt3.value = folder; opt3.textContent = folder;
+    exportFolderSelect.appendChild(opt3);
   });
 }
 
@@ -369,7 +419,7 @@ function renderCards() {
       <button class="delete-card-btn">&times;</button>
       ${card.image ? `<img src="${card.image}" alt="${card.word}">` : ''}
       <div class="word">${card.word}</div>
-      <div class="translation">${card.translation || '--'}</div>
+      ${card.translation ? `<div class="translation">${card.translation}</div>` : ''}
       ${card.definition ? `<div class="definition">${card.definition}</div>` : ''}
     `;
 
@@ -485,7 +535,159 @@ function convertImageToBase64(file) {
   });
 }
 
-// --- ЛОГИКА ТРЕНИРОВКИ (STUDY MODE) ---
+// --- ИМПОРТ / ЭКСПОРТ (JSON) ---
+exportImportBtn.onclick = () => ioModal.classList.remove('hidden');
+closeIoBtn.onclick = () => ioModal.classList.add('hidden');
+
+doExportBtn.onclick = () => {
+  const folderToExport = exportFolderSelect.value;
+  let exportData = {
+    folders: folderToExport === 'Все' ? folders : [folderToExport],
+    cards: folderToExport === 'Все' ? cards : cards.filter(c => c.folder === folderToExport)
+  };
+
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", `flashcards_${folderToExport}_${Date.now()}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+};
+
+doImportBtn.onclick = () => {
+  const file = importFileInput.files[0];
+  if (!file) {
+    alert("Выберите файл!");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      if (importedData.folders && importedData.cards) {
+        // Объединяем папки и карточки
+        importedData.folders.forEach(f => {
+          if (!folders.includes(f)) folders.push(f);
+        });
+
+        importedData.cards.forEach(c => {
+          if (!cards.some(existing => existing.id === c.id)) {
+            cards.push(c);
+          }
+        });
+
+        saveData();
+        render();
+        ioModal.classList.add('hidden');
+        alert("Импорт успешно завершен!");
+      } else {
+        alert("Неверный формат файла JSON!");
+      }
+    } catch (err) {
+      alert("Ошибка при чтении файла JSON!");
+    }
+  };
+  reader.readAsText(file);
+};
+
+// --- СИНХРОНИЗАЦИЯ С GITHUB GIST ---
+syncGistBtn.onclick = () => {
+  gistTokenInput.value = localStorage.getItem('flash_gist_token') || '';
+  gistIdInput.value = localStorage.getItem('flash_gist_id') || '';
+  gistModal.classList.remove('hidden');
+};
+
+closeGistBtn.onclick = () => gistModal.classList.add('hidden');
+
+// Push в Gist
+gistPushBtn.onclick = async () => {
+  const token = gistTokenInput.value.trim();
+  let gistId = gistIdInput.value.trim();
+
+  if (!token) {
+    alert("Введите Personal Access Token от GitHub!");
+    return;
+  }
+
+  localStorage.setItem('flash_gist_token', token);
+
+  const payload = {
+    description: "Flashcards App Data Sync",
+    public: false,
+    files: {
+      "flashcards.json": {
+        content: JSON.stringify({ folders, cards }, null, 2)
+      }
+    }
+  };
+
+  try {
+    let url = "https://api.github.com/gists";
+    let method = "POST";
+
+    if (gistId) {
+      url += `/${gistId}`;
+      method = "PATCH";
+    }
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": `token ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      gistId = data.id;
+      localStorage.setItem('flash_gist_id', gistId);
+      gistIdInput.value = gistId;
+      alert("Данные успешно сохранены в GitHub Gist!");
+    } else {
+      alert("Ошибка GitHub API: " + (data.message || "Не удалось загрузить"));
+    }
+  } catch (err) {
+    alert("Ошибка сети при попытке синхронизации");
+  }
+};
+
+// Pull из Gist
+gistPullBtn.onclick = async () => {
+  const token = gistTokenInput.value.trim();
+  const gistId = gistIdInput.value.trim();
+
+  if (!token || !gistId) {
+    alert("Введите Token и Gist ID!");
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { "Authorization": `token ${token}` }
+    });
+
+    const data = await res.json();
+    if (res.ok && data.files && data.files["flashcards.json"]) {
+      const content = JSON.parse(data.files["flashcards.json"].content);
+      folders = content.folders || folders;
+      cards = content.cards || cards;
+      saveData();
+      render();
+      gistModal.classList.add('hidden');
+      alert("Данные успешно загружены из Gist!");
+    } else {
+      alert("Не удалось прочитать Gist!");
+    }
+  } catch (err) {
+    alert("Ошибка сети при получении данных из Gist");
+  }
+};
+
+// --- ТРЕНИРОВКА (STUDY MODE) ---
 studyModeBtn.onclick = () => {
   studySetupModal.classList.remove('hidden');
 };
@@ -493,14 +695,11 @@ studyModeBtn.onclick = () => {
 closeStudySetupBtn.onclick = () => studySetupModal.classList.add('hidden');
 closeStudyViewerBtn.onclick = () => studyViewerModal.classList.add('hidden');
 
-// Запуск процесса проверки знаний
 startStudyBtn.onclick = () => {
   const selectedFolder = studyFolderSelect.value;
   studyCardMode = document.querySelector('input[name="study-mode-type"]:checked').value;
 
-  studyCardsList = selectedFolder === 'Все' 
-    ? [...cards] 
-    : cards.filter(c => c.folder === selectedFolder);
+  studyCardsList = selectedFolder === 'Все' ? [...cards] : cards.filter(c => c.folder === selectedFolder);
 
   if (studyCardsList.length === 0) {
     alert(i18n[currentLang].noCards);
@@ -513,31 +712,39 @@ startStudyBtn.onclick = () => {
   updateStudyCard();
 };
 
-// Клик для переворота карточки
 flashcard3d.onclick = () => {
   flashcard3d.classList.toggle('flipped');
 };
 
-// Обновление состояния текущей карточки во время тренировки
 function updateStudyCard() {
   const t = i18n[currentLang];
-  flashcard3d.classList.remove('flipped'); // возвращаем лицевой стороной при переключении
+  flashcard3d.classList.remove('flipped');
 
   const card = studyCardsList[studyCurrentIndex];
   studyProgressText.textContent = `${studyCurrentIndex + 1} / ${studyCardsList.length}`;
 
-  flashcardFrontText.textContent = card.word;
+  flashcardFrontLabel.textContent = t.cardFrontLabel;
+  flashcardBackLabel.textContent = t.cardBackLabel;
 
   if (studyCardMode === 'translation') {
-    flashcardBackLabel.textContent = t.cardBackTransLabel;
-    flashcardBackText.textContent = card.translation && card.translation.trim() !== '' ? card.translation : '--';
-  } else {
-    flashcardBackLabel.textContent = t.cardBackDefLabel;
-    flashcardBackText.textContent = card.definition && card.definition.trim() !== '' ? card.definition : '--';
+    // Слово ➔ Перевод
+    flashcardFrontText.innerHTML = card.word;
+    flashcardBackText.innerHTML = (card.translation && card.translation.trim() !== '') ? card.translation : '--';
+  } else if (studyCardMode === 'definition') {
+    // Значение ➔ Слово (Поменяли местами!)
+    flashcardFrontText.innerHTML = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
+    flashcardBackText.innerHTML = card.word;
+  } else if (studyCardMode === 'image') {
+    // Фото ➔ Слово
+    if (card.image) {
+      flashcardFrontText.innerHTML = `<img src="${card.image}" class="flashcard-img-preview" alt="Card Image">`;
+    } else {
+      flashcardFrontText.innerHTML = '--';
+    }
+    flashcardBackText.innerHTML = card.word;
   }
 }
 
-// Навигация Назад / Вперед
 prevCardBtn.onclick = () => {
   if (studyCurrentIndex > 0) {
     studyCurrentIndex--;
