@@ -28,7 +28,7 @@ function renderFolders() {
 
   // Пункт "Все карточки"
   const allLi = document.createElement('li');
-  allLi.textContent = '📂 Все карточки';
+  allLi.innerHTML = `<span>📂 Все карточки</span>`;
   if (activeFolder === 'Все') allLi.classList.add('active');
   allLi.onclick = () => { activeFolder = 'Все'; render(); };
   foldersList.appendChild(allLi);
@@ -36,9 +36,29 @@ function renderFolders() {
   // Кастомные папки
   folders.forEach(folder => {
     const li = document.createElement('li');
-    li.textContent = `📁 ${folder}`;
     if (activeFolder === folder) li.classList.add('active');
-    li.onclick = () => { activeFolder = folder; render(); };
+    
+    // Текст папки
+    const folderTitle = document.createElement('span');
+    folderTitle.textContent = `📁 ${folder}`;
+    folderTitle.onclick = () => { activeFolder = folder; render(); };
+    li.appendChild(folderTitle);
+
+    // Кнопка удаления папки (не показываем для системы и "Основная")
+    if (folder !== 'Основная') {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-folder-btn';
+      deleteBtn.innerHTML = '&times;';
+      deleteBtn.title = 'Удалить папку';
+      
+      deleteBtn.onclick = (e) => {
+        e.stopPropagation(); // Чтобы не срабатывал клик по самой папке
+        deleteFolder(folder);
+      };
+      
+      li.appendChild(deleteBtn);
+    }
+
     foldersList.appendChild(li);
   });
 
@@ -50,6 +70,34 @@ function renderFolders() {
     option.textContent = folder;
     folderSelect.appendChild(option);
   });
+}
+
+// --- Функция удаления папки ---
+function deleteFolder(folderName) {
+  const confirmDelete = confirm(
+    `Удалить папку "${folderName}"?\nКарточки из этой папки будут перемещены в папку "Основная".`
+  );
+
+  if (!confirmDelete) return;
+
+  // 1. Удаляем папку из массива
+  folders = folders.filter(f => f !== folderName);
+
+  // 2. Переносим карточки из этой папки в "Основная"
+  cards = cards.map(card => {
+    if (card.folder === folderName) {
+      return { ...card, folder: 'Основная' };
+    }
+    return card;
+  });
+
+  // 3. Если мы находились в удаляемой папке — переключаемся на "Все"
+  if (activeFolder === folderName) {
+    activeFolder = 'Все';
+  }
+
+  saveData();
+  render();
 }
 
 // --- Рендер карточек ---
@@ -83,7 +131,7 @@ function renderCards() {
 // --- Добавление новой папки ---
 addFolderBtn.onclick = () => {
   const name = newFolderInput.value.trim();
-  if (name && !folders.includes(name)) {
+  if (name && !folders.includes(name) && name !== 'Все') {
     folders.push(name);
     newFolderInput.value = '';
     saveData();
