@@ -1,7 +1,7 @@
 // --- Переводы интерфейса ---
 const i18n = {
   ru: {
-    appTitle: "🎴 Flashcards App",
+    appTitle: "Flashcards App",
     folders: "Папки",
     newFolderPh: "Новая папка...",
     allCards: "Все карточки",
@@ -25,7 +25,7 @@ const i18n = {
     confirmDeleteFolder: 'Удалить папку "{folder}"?\nВсе карточки перейдут в папку "{main}".'
   },
   en: {
-    appTitle: "🎴 Flashcards App",
+    appTitle: "Flashcards App",
     folders: "Folders",
     newFolderPh: "New folder...",
     allCards: "All Flashcards",
@@ -49,7 +49,7 @@ const i18n = {
     confirmDeleteFolder: 'Delete folder "{folder}"?\nAll cards will move to "{main}".'
   },
   cs: {
-    appTitle: "🎴 Kartičky App",
+    appTitle: "Kartičky App",
     folders: "Složky",
     newFolderPh: "Nová složka...",
     allCards: "Všechny kartičky",
@@ -73,7 +73,7 @@ const i18n = {
     confirmDeleteFolder: 'Smazat složku "{folder}"?\nVšechny kartičky se přesunou do "{main}".'
   },
   es: {
-    appTitle: "🎴 Tarjetas App",
+    appTitle: "Tarjetas App",
     folders: "Carpetas",
     newFolderPh: "Nueva carpeta...",
     allCards: "Todas las tarjetas",
