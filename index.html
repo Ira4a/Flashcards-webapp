@@ -42,12 +42,15 @@
     </section>
   </main>
 
-  <!-- Модальное окно создания карточки -->
+  <!-- Модальное окно создания / редактирования карточки -->
   <div id="modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-modal-btn" class="close">&times;</span>
-      <h2>Новая карточка</h2>
+      <h2 id="modal-title">Новая карточка</h2>
       <form id="card-form">
+        <!-- Скрытое поле для хранения ID редактируемой карточки -->
+        <input type="hidden" id="card-id-input">
+
         <label for="word-input">Слово / Фраза:</label>
         <input type="text" id="word-input" required placeholder="Например: Apple">
 
@@ -64,8 +67,13 @@
 
         <label for="image-input">Изображение (необязательно):</label>
         <input type="file" id="image-input" accept="image/*">
+        <!-- Предпросмотр существующей картинки при редактировании -->
+        <div id="image-preview-container" class="hidden" style="margin-top: 0.5rem;">
+          <p style="font-size: 0.8rem; color: var(--text-light);">Текущая картинка:</p>
+          <img id="image-preview" src="" alt="Preview" style="max-height: 80px; border-radius: 6px; margin-top: 4px;">
+        </div>
 
-        <button type="submit" class="btn primary">Сохранить карточку</button>
+        <button type="submit" class="btn primary" id="save-card-btn">Сохранить карточку</button>
       </form>
     </div>
   </div>
