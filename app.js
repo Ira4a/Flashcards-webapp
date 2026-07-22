@@ -519,22 +519,24 @@ function renderCards() {
     return;
   }
 
-  filteredCards.forEach(card => {
-    const tagsHtml = card.tag ? card.tag.split(/[\s,/]+/)
-      .filter(t => t.trim() !== '')
-      .map(t => `<span class="tag-badge">${t.replace(/[()]/g, '')}</span>`)
-      .join('') : '';
+filteredCards.forEach(card => {
+    const tagsList = card.tag ? card.tag.replace(/[()#]/g, '').trim().split(/[\s,/]+/) : [];
     
-     const cardEl = document.createElement('div');
-      cardEl.className = 'card';
-      cardEl.innerHTML = `
-        <button class="delete-card-btn">&times;</button>
-        ${card.image ? `<img src="${card.image}" alt="${card.word}">` : ''}
-        <div class="word">${card.word}</div>
-        ${card.translation ? `<div class="translation">${card.translation}</div>` : ''}
-        ${card.definition ? `<div class="definition">${card.definition}</div>` : ''}
-        ${tagsHtml ? `<div class="tags-container">${tagsHtml}</div>` : ''}
-      `;
+    const tagsHtml = tagsList
+      .filter(t => t.trim() !== '')
+      .map(t => `<span class="tag-badge">${t}</span>`)
+      .join('');
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'card';
+    cardEl.innerHTML = `
+      <button class="delete-card-btn">&times;</button>
+      ${card.image ? `<img src="${card.image}" alt="${card.word}">` : ''}
+      <div class="word">${card.word}</div>
+      ${card.translation ? `<div class="translation">${card.translation}</div>` : ''}
+      ${card.definition ? `<div class="definition">${card.definition}</div>` : ''}
+      ${tagsHtml ? `<div class="tags-container">${tagsHtml}</div>` : ''}
+    `;
 
     cardEl.addEventListener('click', (e) => {
       if (e.target.classList.contains('delete-card-btn')) return;
@@ -546,6 +548,9 @@ function renderCards() {
       e.stopPropagation();
       deleteCard(card.id);
     });
+
+    cardsGrid.appendChild(cardEl);
+  });
 
     cardsGrid.appendChild(cardEl);
   });
@@ -617,7 +622,8 @@ cardForm.onsubmit = async (e) => {
   e.preventDefault();
   const id = cardIdInput.value;
   const word = document.getElementById('word-input').value.trim();
-  const tag = tagInput.value.trim().toLowerCase().replace(/[()]/g, '');
+  const rawTag = tagInput.value.trim().toLowerCase().replace(/[()#]/g, '');
+  const tag = rawTag;
   const translation = document.getElementById('translation-input').value.trim();
   const definition = document.getElementById('definition-input').value.trim();
   const folder = folderSelect.value;
@@ -847,11 +853,15 @@ function updateStudyCard() {
   flashcardFrontText.className = 'flashcard-text';
   flashcardBackText.className = 'flashcard-text';
 
-  const cleanTag = card.tag ? card.tag.replace(/[()]/g, '') : '';
-  const cardWordWithTag = cleanTag ? `${card.word} (${cleanTag})` : card.word;
+  const cleanTags = card.tag ? card.tag.replace(/[()#]/g, '').trim().split(/[\s,/]+/).join(' ') : '';
+
+  const wordDisplayHtml = `
+    <div class="study-word-primary">${card.word}</div>
+    ${cleanTags ? `<div class="study-tag-sub">${cleanTags}</div>` : ''}
+  `;
 
   if (studyCardMode === 'translation') {
-    flashcardFrontText.innerHTML = cardWordWithTag;
+    flashcardFrontText.innerHTML = wordDisplayHtml;
     flashcardBackText.innerHTML = (card.translation && card.translation.trim() !== '') ? card.translation : '--';
   } else if (studyCardMode === 'definition') {
     const defText = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
@@ -861,14 +871,14 @@ function updateStudyCard() {
       flashcardFrontText.classList.add('text-left');
     }
 
-    flashcardBackText.innerHTML = cardWordWithTag;
+    flashcardBackText.innerHTML = wordDisplayHtml;
   } else if (studyCardMode === 'image') {
     if (card.image) {
       flashcardFrontText.innerHTML = `<img src="${card.image}" class="flashcard-img-preview" alt="Card Image">`;
     } else {
       flashcardFrontText.innerHTML = '--';
     }
-    flashcardBackText.innerHTML = cardWordWithTag;
+    flashcardBackText.innerHTML = wordDisplayHtml;
   }
 }
 
