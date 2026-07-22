@@ -207,7 +207,10 @@ const i18n = {
   }
 };
 
-// Application state initialization (Default language is English)
+// Known default main folder names for translation sync
+const allMainFolderNames = Object.values(i18n).map(lang => lang.mainFolder);
+
+// Application state initialization
 let currentLang = localStorage.getItem('flash_lang') || 'en';
 let folders = JSON.parse(localStorage.getItem('flash_folders')) || [i18n[currentLang].mainFolder];
 let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
@@ -281,13 +284,32 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
-// Save data to localStorage
+// Translate default main folder when switching language
+function syncMainFolderName(newLang) {
+  const newMainName = i18n[newLang].mainFolder;
+  
+  if (folders.length > 0 && allMainFolderNames.includes(folders[0])) {
+    const oldMainName = folders[0];
+    folders[0] = newMainName;
+    
+    // Update card bindings for the primary folder
+    cards = cards.map(c => c.folder === oldMainName ? { ...c, folder: newMainName } : c);
+    
+    if (activeFolder === oldMainName) {
+      activeFolder = newMainName;
+    }
+    
+    saveData();
+  }
+}
+
+// Save state to local storage
 function saveData() {
   localStorage.setItem('flash_folders', JSON.stringify(folders));
   localStorage.setItem('flash_cards', JSON.stringify(cards));
 }
 
-// Image input source toggle (file vs URL)
+// Toggle image input source (file vs URL)
 imageSourceRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (e.target.value === 'file') {
@@ -302,7 +324,7 @@ imageSourceRadios.forEach(radio => {
   });
 });
 
-// Update UI texts according to current language
+// Update all UI labels dynamically
 function updateStaticTexts() {
   const t = i18n[currentLang];
 
@@ -343,23 +365,23 @@ function updateStaticTexts() {
 langSelect.onchange = (e) => {
   currentLang = e.target.value;
   localStorage.setItem('flash_lang', currentLang);
+  syncMainFolderName(currentLang);
   updateStaticTexts();
   render();
 };
 
-// Render folder list with collapsible arrow mechanism
+// Render folder list
 function renderFolders() {
   const t = i18n[currentLang];
   foldersList.innerHTML = '';
 
-  // "All Flashcards" item
+  // "All Flashcards" option
   const allLi = document.createElement('li');
   allLi.innerHTML = `<span>${t.allFolder}</span>`;
   if (activeFolder === 'All' || activeFolder === 'Все') allLi.classList.add('active');
   allLi.onclick = () => { activeFolder = 'All'; render(); };
   foldersList.appendChild(allLi);
 
-  // Maximum folders to show before collapsing
   const maxVisible = 3; 
   const foldersToDisplay = isFoldersExpanded ? folders : folders.slice(0, maxVisible);
 
@@ -386,7 +408,6 @@ function renderFolders() {
     foldersList.appendChild(li);
   });
 
-  // Toggle button visibility check
   if (folders.length > maxVisible) {
     toggleFoldersBtn.classList.remove('hidden');
     if (isFoldersExpanded) {
@@ -400,7 +421,7 @@ function renderFolders() {
     toggleFoldersBtn.classList.add('hidden');
   }
 
-  // Populate dropdown options
+  // Populate dropdown lists
   folderSelect.innerHTML = '';
   studyFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
   exportFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
@@ -420,7 +441,6 @@ function renderFolders() {
   });
 }
 
-// Expand / collapse folders button click handler
 toggleFoldersBtn.onclick = () => {
   isFoldersExpanded = !isFoldersExpanded;
   renderFolders();
@@ -794,6 +814,7 @@ nextCardBtn.onclick = () => {
 };
 
 function render() {
+  syncMainFolderName(currentLang);
   renderFolders();
   renderCards();
 }
