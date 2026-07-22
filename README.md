@@ -40,7 +40,7 @@ Each card features a clean layout optimized for quick visual learning:
 ## Deployment on GitHub Pages
 
 1. Clone or download this repository.
-2. Ensure `index.html`, `style.css`, `app.js`, and `hamster.png` are in your root folder.
+2. Ensure `index.html`, `style.css` and`app.js` are in your root folder.
 3. Push your files to your GitHub repository.
 4. Navigate to **Settings** > **Pages** in your repository dashboard.
 5. Under **Build and deployment**, set the source branch to `main` (or `master`) and click **Save**.
