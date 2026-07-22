@@ -10,7 +10,7 @@ const i18n = {
     folderPrefix: "Folder: ",
     createCardBtn: "+ Create card",
     noCards: "No flashcards in this folder yet.",
-    modalTitleNew: "New Flashcard",
+    modalTitleNew: "New Flashcard", 
     modalTitleEdit: "Edit Flashcard",
     lblWord: "Word / Phrase:",
     phWord: "Apple",
