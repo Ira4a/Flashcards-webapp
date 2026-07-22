@@ -468,6 +468,7 @@ input[type="file"]::file-selector-button {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  text-align: center;
 }
 
 .flashcard-3d.flipped .flashcard-inner {
