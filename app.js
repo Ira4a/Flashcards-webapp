@@ -519,7 +519,7 @@ function renderCards() {
     return;
   }
 
-filteredCards.forEach(card => {
+  filteredCards.forEach(card => {
     const tagsList = card.tag ? card.tag.replace(/[()#]/g, '').trim().split(/[\s,/]+/) : [];
     
     const tagsHtml = tagsList
@@ -548,9 +548,6 @@ filteredCards.forEach(card => {
       e.stopPropagation();
       deleteCard(card.id);
     });
-
-    cardsGrid.appendChild(cardEl);
-  });
 
     cardsGrid.appendChild(cardEl);
   });
