@@ -207,10 +207,9 @@ const i18n = {
   }
 };
 
-// Known default main folder names for translation sync
 const allMainFolderNames = Object.values(i18n).map(lang => lang.mainFolder);
 
-// Application state initialization
+// State initialization
 let currentLang = localStorage.getItem('flash_lang') || 'en';
 let folders = JSON.parse(localStorage.getItem('flash_folders')) || [i18n[currentLang].mainFolder];
 let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
@@ -222,7 +221,10 @@ let studyCardsList = [];
 let studyCurrentIndex = 0;
 let studyCardMode = 'translation';
 
-// DOM elements
+// DOM Elements
+const menuToggleBtn = document.getElementById('menu-toggle-btn');
+const headerRight = document.getElementById('header-right');
+
 const langSelect = document.getElementById('lang-select');
 const foldersList = document.getElementById('folders-list');
 const toggleFoldersBtn = document.getElementById('toggle-folders-btn');
@@ -284,7 +286,12 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
-// Translate default main folder when switching language
+// Mobile Hamburger Menu Toggle
+menuToggleBtn.onclick = () => {
+  headerRight.classList.toggle('open');
+};
+
+// Auto sync default primary folder name when changing language
 function syncMainFolderName(newLang) {
   const newMainName = i18n[newLang].mainFolder;
   
@@ -292,7 +299,6 @@ function syncMainFolderName(newLang) {
     const oldMainName = folders[0];
     folders[0] = newMainName;
     
-    // Update card bindings for the primary folder
     cards = cards.map(c => c.folder === oldMainName ? { ...c, folder: newMainName } : c);
     
     if (activeFolder === oldMainName) {
@@ -303,13 +309,11 @@ function syncMainFolderName(newLang) {
   }
 }
 
-// Save state to local storage
 function saveData() {
   localStorage.setItem('flash_folders', JSON.stringify(folders));
   localStorage.setItem('flash_cards', JSON.stringify(cards));
 }
 
-// Toggle image input source (file vs URL)
 imageSourceRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (e.target.value === 'file') {
@@ -324,7 +328,6 @@ imageSourceRadios.forEach(radio => {
   });
 });
 
-// Update all UI labels dynamically
 function updateStaticTexts() {
   const t = i18n[currentLang];
 
@@ -370,12 +373,10 @@ langSelect.onchange = (e) => {
   render();
 };
 
-// Render folder list
 function renderFolders() {
   const t = i18n[currentLang];
   foldersList.innerHTML = '';
 
-  // "All Flashcards" option
   const allLi = document.createElement('li');
   allLi.innerHTML = `<span>${t.allFolder}</span>`;
   if (activeFolder === 'All' || activeFolder === 'Все') allLi.classList.add('active');
@@ -421,7 +422,6 @@ function renderFolders() {
     toggleFoldersBtn.classList.add('hidden');
   }
 
-  // Populate dropdown lists
   folderSelect.innerHTML = '';
   studyFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
   exportFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
@@ -596,7 +596,10 @@ function convertImageToBase64(file) {
 }
 
 // Export / Import
-exportImportBtn.onclick = () => ioModal.classList.remove('hidden');
+exportImportBtn.onclick = () => {
+  headerRight.classList.remove('open');
+  ioModal.classList.remove('hidden');
+};
 closeIoBtn.onclick = () => ioModal.classList.add('hidden');
 
 doExportBtn.onclick = () => {
@@ -653,6 +656,7 @@ doImportBtn.onclick = () => {
 
 // Sync Gist
 syncGistBtn.onclick = () => {
+  headerRight.classList.remove('open');
   gistTokenInput.value = localStorage.getItem('flash_gist_token') || '';
   gistIdInput.value = localStorage.getItem('flash_gist_id') || '';
   gistModal.classList.remove('hidden');
@@ -746,6 +750,7 @@ gistPullBtn.onclick = async () => {
 
 // Study Mode
 studyModeBtn.onclick = () => {
+  headerRight.classList.remove('open');
   studySetupModal.classList.remove('hidden');
 };
 
