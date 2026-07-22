@@ -1,6 +1,6 @@
 # My Flashcards Web Application
 
-A lightweight, fully responsive, and feature-rich flashcard web application designed for learning languages and memorizing vocabulary efficiently. Built entirely with vanilla HTML5, CSS3, and JavaScript (ES6+), it runs directly in the browser with no server setup or external dependencies required.
+Built entirely with vanilla HTML5, CSS3, and JavaScript (ES6+), it runs directly in the browser with no server setup or external dependencies required.
 
 ---
 
