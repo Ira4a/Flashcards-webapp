@@ -3,22 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Flashcards</title>
+  <title>Universal Flashcards</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header>
-    <h1 id="i18n-app-title">Flashcards App</h1>
+    <div class="header-left">
+      <h1 id="i18n-app-title">Flashcards App</h1>
+    </div>
 
-    <!-- Hamburger Menu Button for mobile -->
+    <!-- Theme Color Picker Circles -->
+    <div class="theme-picker">
+      <button class="theme-circle theme-mint" data-theme="mint" title="Mint Green"></button>
+      <button class="theme-circle theme-blue" data-theme="blue" title="Dark Blue"></button>
+      <button class="theme-circle theme-purple active" data-theme="purple" title="Purple"></button>
+    </div>
+
     <button id="menu-toggle-btn" class="menu-toggle-btn" aria-label="Toggle Navigation">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </button>
 
-    <!-- Header Actions (Responsive Drawer) -->
     <div id="header-right" class="header-right">
       <button id="sync-gist-btn" class="btn icon-btn" title="GitHub Gist Sync"><span class="btn-text">Sync</span></button>
       <button id="export-import-btn" class="btn icon-btn" title="Export / Import"><span class="btn-text">Export/Import</span></button>
@@ -73,6 +80,22 @@
 
         <label for="word-input" id="i18n-lbl-word">Word / Phrase:</label>
         <input type="text" id="word-input" required placeholder="Apple">
+
+        <!-- Part of Speech / Tag field with Autocomplete -->
+        <label for="tag-input" id="i18n-lbl-tag">Part of Speech / Tag:</label>
+        <input type="text" id="tag-input" list="tag-suggestions" placeholder="e.g. noun, verb, phrasal verb...">
+        <datalist id="tag-suggestions">
+          <option value="noun">
+          <option value="verb">
+          <option value="adjective">
+          <option value="adverb">
+          <option value="phrasal verb">
+          <option value="phrasal word">
+          <option value="idiom">
+          <option value="preposition">
+          <option value="conjunction">
+          <option value="interjection">
+        </datalist>
 
         <label for="translation-input" id="i18n-lbl-translation">Translation:</label>
         <input type="text" id="translation-input" placeholder="A round fruit">
@@ -186,29 +209,29 @@
   </div>
 
   <!-- Interactive study viewer -->
-<div id="study-viewer-modal" class="modal hidden">
-  <div class="modal-content study-viewer-content">
-    <span id="close-study-viewer-btn" class="close">&times;</span>
+  <div id="study-viewer-modal" class="modal hidden">
+    <div class="modal-content study-viewer-content">
+      <span id="close-study-viewer-btn" class="close">&times;</span>
 
-    <div class="study-progress" id="study-progress-text">1 / 10</div>
+      <div class="study-progress" id="study-progress-text">1 / 10</div>
 
-    <div class="flashcard-3d" id="flashcard-3d">
-      <div class="flashcard-inner">
-        <div class="flashcard-front">
-          <div class="flashcard-text" id="flashcard-front-text">---</div>
-        </div>
-        <div class="flashcard-back">
-          <div class="flashcard-text" id="flashcard-back-text">---</div>
+      <div class="flashcard-3d" id="flashcard-3d">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <div class="flashcard-text" id="flashcard-front-text">---</div>
+          </div>
+          <div class="flashcard-back">
+            <div class="flashcard-text" id="flashcard-back-text">---</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="study-nav">
-      <button id="prev-card-btn" class="btn secondary">&larr;</button>
-      <button id="next-card-btn" class="btn secondary">&rarr;</button>
+      <div class="study-nav">
+        <button id="prev-card-btn" class="btn secondary">&larr;</button>
+        <button id="next-card-btn" class="btn secondary">&rarr;</button>
+      </div>
     </div>
   </div>
-</div>
 
   <script src="app.js"></script>
 </body>
