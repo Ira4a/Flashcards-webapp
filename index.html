@@ -11,7 +11,15 @@
   <header>
     <h1 id="i18n-app-title">Flashcards App</h1>
 
-    <div class="header-right">
+    <!-- Hamburger Menu Button for mobile -->
+    <button id="menu-toggle-btn" class="menu-toggle-btn" aria-label="Toggle Navigation">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Header Actions (Responsive Drawer) -->
+    <div id="header-right" class="header-right">
       <button id="sync-gist-btn" class="btn icon-btn" title="GitHub Gist Sync"><span class="btn-text">Sync</span></button>
       <button id="export-import-btn" class="btn icon-btn" title="Export / Import"><span class="btn-text">Export/Import</span></button>
       <button id="study-mode-btn" class="btn secondary"><span id="i18n-study-btn">Flashcards</span></button>
@@ -38,7 +46,6 @@
       
       <ul id="folders-list"></ul>
       
-      <!-- Collapsible button for extra folders -->
       <button id="toggle-folders-btn" class="toggle-folders-btn hidden">
         <span id="toggle-folders-text">More folders</span>
         <span class="arrow-icon">▼</span>
@@ -99,7 +106,7 @@
   <div id="io-modal" class="modal hidden">
     <div class="modal-content io-modal-content">
       <span id="close-io-btn" class="close">&times;</span>
-      <h2 id="i18n-io-title" style="margin-bottom: 1.2rem;">Export / Import</h2>
+      <h2 id="i18n-io-title" style="margin-bottom: 0.8rem;">Export / Import</h2>
 
       <div class="io-card">
         <h3 id="i18n-export-title">Export</h3>
@@ -110,7 +117,7 @@
         <button id="do-export-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Download JSON</button>
       </div>
 
-      <div class="io-card" style="margin-top: 1rem;">
+      <div class="io-card" style="margin-top: 0.8rem;">
         <h3 id="i18n-import-title">Import</h3>
         <div class="form-group">
           <label id="i18n-import-lbl">Select .json file:</label>
@@ -134,7 +141,7 @@
       </div>
 
       <div class="form-group">
-        <label for="gist-id-input">Gist ID (optional, created automatically):</label>
+        <label for="gist-id-input">Gist ID (optional):</label>
         <input type="text" id="gist-id-input" placeholder="4b3f8a...">
       </div>
 
@@ -157,7 +164,7 @@
       </div>
 
       <div class="form-group">
-        <label id="i18n-study-lbl-mode" style="margin-bottom: 0.5rem;">Flashcard Mode:</label>
+        <label id="i18n-study-lbl-mode" style="margin-bottom: 0.3rem;">Flashcard Mode:</label>
         <div class="radio-group-vertical">
           <label class="mode-radio-card">
             <input type="radio" name="study-mode-type" value="translation" checked> 
@@ -174,7 +181,7 @@
         </div>
       </div>
 
-      <button id="start-study-btn" class="btn primary" style="width: 100%; margin-top: 1.2rem;">OK</button>
+      <button id="start-study-btn" class="btn primary" style="width: 100%; margin-top: 1rem;">OK</button>
     </div>
   </div>
 
