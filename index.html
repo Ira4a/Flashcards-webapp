@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Flashcards</title>
+  <title>Universal Flashcards</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,95 +30,103 @@
 
   <main class="container">
     <aside class="sidebar">
-      <h2 id="i18n-folders">Папки</h2>
+      <h2 id="i18n-folders">Folders</h2>
       <div class="folder-controls">
-        <input type="text" id="new-folder-input" placeholder="Новая папка...">
+        <input type="text" id="new-folder-input" placeholder="New folder...">
         <button id="add-folder-btn">+</button>
       </div>
+      
       <ul id="folders-list"></ul>
+      
+      <!-- Collapsible button for extra folders -->
+      <button id="toggle-folders-btn" class="toggle-folders-btn hidden">
+        <span id="toggle-folders-text">More folders</span>
+        <span class="arrow-icon">▼</span>
+      </button>
     </aside>
 
     <section class="content">
       <div class="actions">
-        <button id="open-modal-btn" class="btn primary">+ Создать карточку</button>
+        <button id="open-modal-btn" class="btn primary">+ Create card</button>
       </div>
 
-      <h2 id="current-folder-title">Все карточки</h2>
+      <h2 id="current-folder-title">All Flashcards</h2>
 
       <div id="cards-grid" class="cards-grid"></div>
     </section>
   </main>
 
-  <!-- Модальное окно создания / редактирования карточки -->
+  <!-- Create / Edit card modal -->
   <div id="modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-modal-btn" class="close">&times;</span>
-      <h2 id="modal-title">Новая карточка</h2>
+      <h2 id="modal-title">New Flashcard</h2>
       <form id="card-form">
         <input type="hidden" id="card-id-input">
 
-        <label for="word-input" id="i18n-lbl-word">Слово / Фраза: </label>
+        <label for="word-input" id="i18n-lbl-word">Word / Phrase:</label>
         <input type="text" id="word-input" required placeholder="Apple">
 
-        <label for="translation-input" id="i18n-lbl-translation">Перевод:</label>
-        <input type="text" id="translation-input" placeholder="Яблоко">
+        <label for="translation-input" id="i18n-lbl-translation">Translation:</label>
+        <input type="text" id="translation-input" placeholder="A round fruit">
 
-        <label for="definition-input" id="i18n-lbl-definition">Определение / Контекст:</label>
-        <textarea id="definition-input" placeholder="Сочный плод..."></textarea>
+        <label for="definition-input" id="i18n-lbl-definition">Definition / Context:</label>
+        <textarea id="definition-input" placeholder="Context sentence..."></textarea>
 
-        <label for="folder-select" id="i18n-lbl-folder">Выберите папку:</label>
+        <label for="folder-select" id="i18n-lbl-folder">Select folder:</label>
         <select id="folder-select"></select>
 
-        <label id="i18n-lbl-image">Изображение:</label>
+        <label id="i18n-lbl-image">Image:</label>
         <div class="image-source-options">
-          <label><input type="radio" name="image-source" value="file" checked> <span id="i18n-opt-file">С компьютера</span></label>
-          <label><input type="radio" name="image-source" value="url"> <span id="i18n-opt-url">По ссылке (URL)</span></label>
+          <label><input type="radio" name="image-source" value="file" checked> <span id="i18n-opt-file">From computer</span></label>
+          <label><input type="radio" name="image-source" value="url"> <span id="i18n-opt-url">Via URL link</span></label>
         </div>
 
         <input type="file" id="image-input" accept="image/*">
         <input type="url" id="image-url-input" class="hidden" placeholder="https://example.com/image.jpg">
 
         <div id="image-preview-container" class="hidden">
-          <img id="image-preview" src="" alt="Preview" style="max-height: 120px; max-width: 100%; object-fit: contain;">
-          <button type="button" id="remove-image-btn" class="btn-danger-sm">Удалить картинку</button>
+          <img id="image-preview" src="" alt="Preview">
+          <button type="button" id="remove-image-btn" class="btn-danger-sm">Remove image</button>
         </div>
 
-        <button type="submit" id="save-card-btn" class="btn primary">Сохранить карточку</button>
+        <button type="submit" id="save-card-btn" class="btn primary">Save Flashcard</button>
       </form>
     </div>
   </div>
 
-  <!-- Обновленное модальное окно Экспорта / Импорта -->
+  <!-- Export / Import modal -->
   <div id="io-modal" class="modal hidden">
     <div class="modal-content io-modal-content">
       <span id="close-io-btn" class="close">&times;</span>
-      <h2 id="i18n-io-title" style="margin-bottom: 1.2rem;">Экспорт / Импорт</h2>
+      <h2 id="i18n-io-title" style="margin-bottom: 1.2rem;">Export / Import</h2>
 
       <div class="io-card">
-        <h3 id="i18n-export-title">Экспорт</h3>
+        <h3 id="i18n-export-title">Export</h3>
         <div class="form-group">
-          <label for="export-folder-select" id="i18n-export-lbl">Выберите папку для экспорта:</label>
+          <label for="export-folder-select" id="i18n-export-lbl">Select folder to export:</label>
           <select id="export-folder-select"></select>
         </div>
-        <button id="do-export-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Скачать JSON</button>
+        <button id="do-export-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Download JSON</button>
       </div>
 
       <div class="io-card" style="margin-top: 1rem;">
-        <h3 id="i18n-import-title">Импорт</h3>
+        <h3 id="i18n-import-title">Import</h3>
         <div class="form-group">
-          <label id="i18n-import-lbl">Выберите файл .json:</label>
+          <label id="i18n-import-lbl">Select .json file:</label>
           <input type="file" id="import-file-input" accept=".json">
         </div>
-        <button id="do-import-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Загрузить данные</button>
+        <button id="do-import-btn" class="btn primary" style="width: 100%; margin-top: 0.5rem;">Upload data</button>
       </div>
     </div>
   </div>
 
-  <!-- Модальное окно Синхронизации через GitHub Gist -->
+  <!-- GitHub Gist sync modal -->
   <div id="gist-modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-gist-btn" class="close">&times;</span>
       <h2>GitHub Gist Sync</h2>
+      <p class="gist-desc">Sync your flashcards with GitHub Gist to access them across your devices.</p>
       
       <div class="form-group">
         <label for="gist-token-input">GitHub Access Token:</label>
@@ -126,42 +134,42 @@
       </div>
 
       <div class="form-group">
-        <label for="gist-id-input">Gist ID (создастся автоматически):</label>
+        <label for="gist-id-input">Gist ID (optional, created automatically):</label>
         <input type="text" id="gist-id-input" placeholder="4b3f8a...">
       </div>
 
       <div class="gist-actions">
-        <button id="gist-push-btn" class="btn primary">Загрузить (Push)</button>
-        <button id="gist-pull-btn" class="btn secondary">Скачать (Pull)</button>
+        <button id="gist-push-btn" class="btn primary">Upload (Push)</button>
+        <button id="gist-pull-btn" class="btn secondary">Download (Pull)</button>
       </div>
     </div>
   </div>
 
-  <!-- Модальное окно настройки Тренировки -->
+  <!-- Study setup modal -->
   <div id="study-setup-modal" class="modal hidden">
     <div class="modal-content">
       <span id="close-study-setup-btn" class="close">&times;</span>
-      <h2 id="i18n-study-setup-title">Настройка тренировки</h2>
+      <h2 id="i18n-study-setup-title">Study Setup</h2>
 
       <div class="form-group">
-        <label for="study-folder-select" id="i18n-study-lbl-folder">Выберите папку:</label>
+        <label for="study-folder-select" id="i18n-study-lbl-folder">Select folder:</label>
         <select id="study-folder-select"></select>
       </div>
 
       <div class="form-group">
-        <label id="i18n-study-lbl-mode" style="margin-bottom: 0.5rem;">Режим карточки:</label>
+        <label id="i18n-study-lbl-mode" style="margin-bottom: 0.5rem;">Flashcard Mode:</label>
         <div class="radio-group-vertical">
           <label class="mode-radio-card">
             <input type="radio" name="study-mode-type" value="translation" checked> 
-            <span id="i18n-mode-trans">Слово ➔ Перевод</span>
+            <span id="i18n-mode-trans">Word &rarr; Translation</span>
           </label>
           <label class="mode-radio-card">
             <input type="radio" name="study-mode-type" value="definition"> 
-            <span id="i18n-mode-def">Значение ➔ Слово</span>
+            <span id="i18n-mode-def">Meaning &rarr; Word</span>
           </label>
           <label class="mode-radio-card">
             <input type="radio" name="study-mode-type" value="image"> 
-            <span id="i18n-mode-img">Фото ➔ Слово</span>
+            <span id="i18n-mode-img">Photo &rarr; Word</span>
           </label>
         </div>
       </div>
@@ -170,7 +178,7 @@
     </div>
   </div>
 
-  <!-- Flashcards Viewer -->
+  <!-- Interactive study viewer -->
   <div id="study-viewer-modal" class="modal hidden">
     <div class="modal-content study-viewer-content">
       <span id="close-study-viewer-btn" class="close">&times;</span>
@@ -180,19 +188,19 @@
       <div class="flashcard-3d" id="flashcard-3d">
         <div class="flashcard-inner">
           <div class="flashcard-front">
-            <span class="card-side-label" id="flashcard-front-label">Лицевая сторона</span>
+            <span class="card-side-label" id="flashcard-front-label">Front Side</span>
             <div class="flashcard-text" id="flashcard-front-text">---</div>
           </div>
           <div class="flashcard-back">
-            <span class="card-side-label" id="flashcard-back-label">Обратная сторона</span>
+            <span class="card-side-label" id="flashcard-back-label">Back Side</span>
             <div class="flashcard-text" id="flashcard-back-text">---</div>
           </div>
         </div>
       </div>
 
       <div class="study-nav">
-        <button id="prev-card-btn" class="btn secondary"><-</button>
-        <button id="next-card-btn" class="btn secondary">-></button>
+        <button id="prev-card-btn" class="btn secondary">&larr;</button>
+        <button id="next-card-btn" class="btn secondary">&rarr;</button>
       </div>
     </div>
   </div>
