@@ -294,17 +294,22 @@ h1 {
   text-align: justify;
 }
 
-/* Part of Speech Tag Badge (After Description) */
+.card .tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
 .card .tag-badge {
-  align-self: flex-start;
-  margin-top: 0.3rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.55rem;
   border: 1px solid var(--primary);
   border-radius: 12px;
   background-color: transparent;
   color: var(--primary);
   font-size: 0.75rem;
   font-weight: 600;
+  text-transform: lowercase;
 }
 
 .delete-card-btn {
