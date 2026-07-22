@@ -14,6 +14,8 @@ const i18n = {
     modalTitleEdit: "Edit Flashcard",
     lblWord: "Word / Phrase:",
     phWord: "Apple",
+    lblTag: "Part of Speech / Tag:",
+    phTag: "e.g. noun, verb, phrasal verb...",
     lblTranslation: "Translation:",
     phTranslation: "A round fruit",
     lblDefinition: "Definition / Context:",
@@ -55,6 +57,8 @@ const i18n = {
     modalTitleEdit: "Редактировать карточку",
     lblWord: "Слово / Фраза:",
     phWord: "Apple",
+    lblTag: "Часть речи / Тег:",
+    phTag: "например: noun, verb, phrasal verb...",
     lblTranslation: "Перевод:",
     phTranslation: "Яблоко",
     lblDefinition: "Определение / Контекст:",
@@ -96,6 +100,8 @@ const i18n = {
     modalTitleEdit: "Upravit kartičku",
     lblWord: "Slovo / Fráze:",
     phWord: "Apple",
+    lblTag: "Slovní druh / Tag:",
+    phTag: "např. noun, verb, phrasal verb...",
     lblTranslation: "Překlad:",
     phTranslation: "Jablko",
     lblDefinition: "Definice / Kontext:",
@@ -137,6 +143,8 @@ const i18n = {
     modalTitleEdit: "Editar tarjeta",
     lblWord: "Palabra / Frase:",
     phWord: "Apple",
+    lblTag: "Categoría / Etiqueta:",
+    phTag: "ej. noun, verb, phrasal verb...",
     lblTranslation: "Traducción:",
     phTranslation: "Manzana",
     lblDefinition: "Definición / Contexto:",
@@ -178,6 +186,8 @@ const i18n = {
     modalTitleEdit: "Karti Düzenle",
     lblWord: "Kelime / İfade:",
     phWord: "Apple",
+    lblTag: "Sözcük Türü / Etiket:",
+    phTag: "ör. noun, verb, phrasal verb...",
     lblTranslation: "Çeviri:",
     phTranslation: "Elma",
     lblDefinition: "Tanım / Bağlam:",
@@ -211,6 +221,7 @@ const allMainFolderNames = Object.values(i18n).map(lang => lang.mainFolder);
 
 // State initialization
 let currentLang = localStorage.getItem('flash_lang') || 'en';
+let currentTheme = localStorage.getItem('flash_theme') || 'purple';
 let folders = JSON.parse(localStorage.getItem('flash_folders')) || [i18n[currentLang].mainFolder];
 let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
 let activeFolder = 'All';
@@ -241,12 +252,16 @@ const closeModalBtn = document.getElementById('close-modal-btn');
 const cardForm = document.getElementById('card-form');
 const cardIdInput = document.getElementById('card-id-input');
 const folderSelect = document.getElementById('folder-select');
+const tagInput = document.getElementById('tag-input');
 const imageInput = document.getElementById('image-input');
 const imageUrlInput = document.getElementById('image-url-input');
 const imagePreviewContainer = document.getElementById('image-preview-container');
 const imagePreview = document.getElementById('image-preview');
 const removeImageBtn = document.getElementById('remove-image-btn');
 const imageSourceRadios = document.querySelectorAll('input[name="image-source"]');
+
+// Theme Circles DOM
+const themeCircles = document.querySelectorAll('.theme-circle');
 
 // Export/Import Modal DOM
 const exportImportBtn = document.getElementById('export-import-btn');
@@ -284,12 +299,36 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
+// Theme Selector Logic
+function applyTheme(themeName) {
+  currentTheme = themeName;
+  document.documentElement.setAttribute('data-theme-style', themeName);
+  localStorage.setItem('flash_theme', themeName);
+
+  themeCircles.forEach(circle => {
+    if (circle.getAttribute('data-theme') === themeName) {
+      circle.classList.add('active');
+    } else {
+      circle.classList.remove('active');
+    }
+  });
+}
+
+themeCircles.forEach(circle => {
+  circle.onclick = () => {
+    const selectedTheme = circle.getAttribute('data-theme');
+    applyTheme(selectedTheme);
+  };
+});
+
+// Initial theme apply
+applyTheme(currentTheme);
+
 // Mobile Hamburger Menu Toggle
 menuToggleBtn.onclick = () => {
   headerRight.classList.toggle('open');
 };
 
-// Auto sync default primary folder name when changing language
 function syncMainFolderName(newLang) {
   const newMainName = i18n[newLang].mainFolder;
   
@@ -312,12 +351,10 @@ function saveData() {
   localStorage.setItem('flash_cards', JSON.stringify(cards));
 }
 
-// Auto-save Token to LocalStorage on typing
 gistTokenInput.addEventListener('input', (e) => {
   localStorage.setItem('flash_gist_token', e.target.value.trim());
 });
 
-// Auto-save Gist ID to LocalStorage on typing
 gistIdInput.addEventListener('input', (e) => {
   localStorage.setItem('flash_gist_id', e.target.value.trim());
 });
@@ -346,6 +383,8 @@ function updateStaticTexts() {
 
   document.getElementById('i18n-lbl-word').textContent = t.lblWord;
   document.getElementById('word-input').placeholder = t.phWord;
+  document.getElementById('i18n-lbl-tag').textContent = t.lblTag;
+  tagInput.placeholder = t.phTag;
   document.getElementById('i18n-lbl-translation').textContent = t.lblTranslation;
   document.getElementById('translation-input').placeholder = t.phTranslation;
   document.getElementById('i18n-lbl-definition').textContent = t.lblDefinition;
@@ -489,6 +528,7 @@ function renderCards() {
       <div class="word">${card.word}</div>
       ${card.translation ? `<div class="translation">${card.translation}</div>` : ''}
       ${card.definition ? `<div class="definition">${card.definition}</div>` : ''}
+      ${card.tag ? `<div class="tag-badge">(${card.tag})</div>` : ''}
     `;
 
     cardEl.addEventListener('click', (e) => {
@@ -525,6 +565,7 @@ addFolderBtn.onclick = () => {
 openModalBtn.onclick = () => {
   cardForm.reset();
   cardIdInput.value = '';
+  tagInput.value = '';
   editingCardImage = null;
   imagePreviewContainer.classList.add('hidden');
   document.querySelector('input[name="image-source"][value="file"]').checked = true;
@@ -538,6 +579,7 @@ openModalBtn.onclick = () => {
 function openEditModal(card) {
   cardIdInput.value = card.id;
   document.getElementById('word-input').value = card.word;
+  tagInput.value = card.tag || '';
   document.getElementById('translation-input').value = card.translation || '';
   document.getElementById('definition-input').value = card.definition || '';
   folderSelect.value = folders.includes(card.folder) ? card.folder : folders[0];
@@ -570,6 +612,7 @@ cardForm.onsubmit = async (e) => {
   e.preventDefault();
   const id = cardIdInput.value;
   const word = document.getElementById('word-input').value.trim();
+  const tag = tagInput.value.trim().toLowerCase();
   const translation = document.getElementById('translation-input').value.trim();
   const definition = document.getElementById('definition-input').value.trim();
   const folder = folderSelect.value;
@@ -584,9 +627,9 @@ cardForm.onsubmit = async (e) => {
   }
 
   if (id) {
-    cards = cards.map(c => c.id === id ? { ...c, word, translation, definition, folder, image: imageBase64 } : c);
+    cards = cards.map(c => c.id === id ? { ...c, word, tag, translation, definition, folder, image: imageBase64 } : c);
   } else {
-    cards.push({ id: Date.now().toString(), word, translation, definition, folder, image: imageBase64 });
+    cards.push({ id: Date.now().toString(), word, tag, translation, definition, folder, image: imageBase64 });
   }
 
   saveData();
@@ -799,8 +842,10 @@ function updateStudyCard() {
   flashcardFrontText.className = 'flashcard-text';
   flashcardBackText.className = 'flashcard-text';
 
+  const cardWordWithTag = card.tag ? `${card.word} (${card.tag})` : card.word;
+
   if (studyCardMode === 'translation') {
-    flashcardFrontText.innerHTML = card.word;
+    flashcardFrontText.innerHTML = cardWordWithTag;
     flashcardBackText.innerHTML = (card.translation && card.translation.trim() !== '') ? card.translation : '--';
   } else if (studyCardMode === 'definition') {
     const defText = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
@@ -810,14 +855,14 @@ function updateStudyCard() {
       flashcardFrontText.classList.add('text-left');
     }
 
-    flashcardBackText.innerHTML = card.word;
+    flashcardBackText.innerHTML = cardWordWithTag;
   } else if (studyCardMode === 'image') {
     if (card.image) {
       flashcardFrontText.innerHTML = `<img src="${card.image}" class="flashcard-img-preview" alt="Card Image">`;
     } else {
       flashcardFrontText.innerHTML = '--';
     }
-    flashcardBackText.innerHTML = card.word;
+    flashcardBackText.innerHTML = cardWordWithTag;
   }
 }
 
