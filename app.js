@@ -892,20 +892,25 @@ flashcard3d.onclick = () => {
 };
 
 function updateStudyCard() {
-  const t = i18n[currentLang];
   flashcard3d.classList.remove('flipped');
 
   const card = studyCardsList[studyCurrentIndex];
   studyProgressText.textContent = `${studyCurrentIndex + 1} / ${studyCardsList.length}`;
 
-  flashcardFrontLabel.textContent = t.cardFrontLabel;
-  flashcardBackLabel.textContent = t.cardBackLabel;
+  flashcardFrontText.className = 'flashcard-text';
+  flashcardBackText.className = 'flashcard-text';
 
   if (studyCardMode === 'translation') {
     flashcardFrontText.innerHTML = card.word;
     flashcardBackText.innerHTML = (card.translation && card.translation.trim() !== '') ? card.translation : '--';
   } else if (studyCardMode === 'definition') {
-    flashcardFrontText.innerHTML = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
+    const defText = (card.definition && card.definition.trim() !== '') ? card.definition : '--';
+    flashcardFrontText.innerHTML = defText;
+    
+    if (defText !== '--') {
+      flashcardFrontText.classList.add('text-left');
+    }
+
     flashcardBackText.innerHTML = card.word;
   } else if (studyCardMode === 'image') {
     if (card.image) {
