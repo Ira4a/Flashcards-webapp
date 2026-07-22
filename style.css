@@ -9,6 +9,24 @@
   --border: #e5e7eb;
 }
 
+[data-theme-style="mint"] {
+  --primary: #059669;
+  --primary-hover: #047857;
+  --secondary: #d1fae5;
+}
+
+[data-theme-style="blue"] {
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --secondary: #e0f2fe;
+}
+
+[data-theme-style="purple"] {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary: #e0e7ff;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -41,19 +59,47 @@ h1 {
   white-space: nowrap;
 }
 
+/* Theme circles in header center */
+.theme-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.theme-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.theme-circle:hover {
+  transform: scale(1.15);
+}
+
+.theme-circle.active {
+  border-color: var(--text);
+  transform: scale(1.15);
+}
+
+.theme-mint { background-color: #10b981; }
+.theme-blue { background-color: #0284c7; }
+.theme-purple { background-color: #4f46e5; }
+
 .header-right {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* Hamburger button styles */
 .menu-toggle-btn {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 28px;
-  height: 20px;
+  width: 26px;
+  height: 18px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -65,7 +111,6 @@ h1 {
   height: 3px;
   background-color: var(--text);
   border-radius: 2px;
-  transition: all 0.2s ease;
 }
 
 .icon-btn {
@@ -82,7 +127,7 @@ h1 {
 }
 
 .lang-selector select {
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   background-color: #fff;
@@ -231,7 +276,7 @@ h1 {
 .card .word {
   font-size: 1.1rem;
   font-weight: bold;
-  text-align: left;
+  text-align: justify;
   padding-right: 1.2rem;
 }
 
@@ -239,7 +284,7 @@ h1 {
   color: var(--primary);
   font-weight: 600;
   font-size: 0.95rem;
-  text-align: left;
+  text-align: justify;
 }
 
 .card .definition {
@@ -247,6 +292,19 @@ h1 {
   color: var(--text-light);
   font-style: italic;
   text-align: justify;
+}
+
+/* Part of Speech Tag Badge (After Description) */
+.card .tag-badge {
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  background-color: transparent;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .delete-card-btn {
@@ -277,6 +335,10 @@ h1 {
   color: white;
 }
 
+.btn.primary:hover {
+  background-color: var(--primary-hover);
+}
+
 .btn.secondary {
   background-color: var(--secondary);
   color: var(--primary);
@@ -293,7 +355,6 @@ h1 {
   margin-top: 0.3rem;
 }
 
-/* Modals - Ultra Compact Fix */
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -314,7 +375,7 @@ h1 {
   padding: 1.2rem;
   border-radius: 12px;
   width: 92%;
-  max-width: 380px; /* Reduced modal width */
+  max-width: 380px;
   position: relative;
   max-height: 88vh;
   overflow-y: auto;
@@ -491,7 +552,7 @@ input[type="file"]::file-selector-button {
 }
 
 .flashcard-text {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: bold;
   color: var(--text);
   word-break: break-word;
@@ -527,11 +588,14 @@ input[type="file"]::file-selector-button {
 
 /* MOBILE RESPONSIVE QUERIES */
 @media (max-width: 768px) {
+  header {
+    padding: 0.6rem 0.8rem;
+  }
+
   .menu-toggle-btn {
     display: flex;
   }
 
-  /* Responsive Mobile Header Drawer */
   .header-right {
     display: none;
     position: absolute;
