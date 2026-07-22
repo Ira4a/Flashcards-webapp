@@ -1,5 +1,46 @@
-// --- Переводы (i18n) без слова (необязательно) ---
+// Translations dictionary with default language set to English ('en')
 const i18n = {
+  en: {
+    appTitle: "Flashcards App",
+    folders: "Folders",
+    newFolderPh: "New folder...",
+    allCards: "All Flashcards",
+    allFolder: "📂 All Flashcards",
+    mainFolder: "General",
+    folderPrefix: "Folder: ",
+    createCardBtn: "+ Create card",
+    noCards: "No flashcards in this folder yet.",
+    modalTitleNew: "New Flashcard",
+    modalTitleEdit: "Edit Flashcard",
+    lblWord: "Word / Phrase:",
+    phWord: "Apple",
+    lblTranslation: "Translation:",
+    phTranslation: "A round fruit",
+    lblDefinition: "Definition / Context:",
+    phDefinition: "Context sentence...",
+    lblFolder: "Select folder:",
+    lblImage: "Image:",
+    optFile: "From computer",
+    optUrl: "Via URL link",
+    removeImageBtn: "Remove image",
+    saveCardBtn: "Save Flashcard",
+    confirmDeleteFolder: 'Delete folder "{folder}"?\nCards will move to "{main}".',
+    studyBtn: "Flashcards",
+    studySetupTitle: "Study Setup",
+    studyLblFolder: "Select folder:",
+    studyLblMode: "Flashcard Mode:",
+    modeTrans: "Word ➔ Translation",
+    modeDef: "Meaning ➔ Word",
+    modeImg: "Photo ➔ Word",
+    cardFrontLabel: "Front Side",
+    cardBackLabel: "Back Side",
+    exportTitle: "Export",
+    importTitle: "Import",
+    exportLbl: "Select folder to export:",
+    importLbl: "Select .json file:",
+    moreFolders: "More folders",
+    lessFolders: "Fewer folders"
+  },
   ru: {
     appTitle: "Flashcards App",
     folders: "Папки",
@@ -37,46 +78,9 @@ const i18n = {
     exportTitle: "Экспорт",
     importTitle: "Импорт",
     exportLbl: "Выберите папку для экспорта:",
-    importLbl: "Выберите файл .json:"
-  },
-  en: {
-    appTitle: "Flashcards App",
-    folders: "Folders",
-    newFolderPh: "New folder...",
-    allCards: "All Flashcards",
-    allFolder: "📂 All Flashcards",
-    mainFolder: "General",
-    folderPrefix: "Folder: ",
-    createCardBtn: "+ Add Flashcard",
-    noCards: "No flashcards in this folder yet.",
-    modalTitleNew: "New Flashcard",
-    modalTitleEdit: "Edit Flashcard",
-    lblWord: "Word / Phrase:",
-    phWord: "Apple",
-    lblTranslation: "Translation:",
-    phTranslation: "A round fruit",
-    lblDefinition: "Definition / Context:",
-    phDefinition: "Context sentence...",
-    lblFolder: "Select Folder:",
-    lblImage: "Image:",
-    optFile: "From computer",
-    optUrl: "Via URL link",
-    removeImageBtn: "Remove Image",
-    saveCardBtn: "Save Flashcard",
-    confirmDeleteFolder: 'Delete folder "{folder}"?\nCards will move to "{main}".',
-    studyBtn: "Flashcards",
-    studySetupTitle: "Study Setup",
-    studyLblFolder: "Select Folder:",
-    studyLblMode: "Flashcard Mode:",
-    modeTrans: "Word ➔ Translation",
-    modeDef: "Meaning ➔ Word",
-    modeImg: "Photo ➔ Word",
-    cardFrontLabel: "Front Side",
-    cardBackLabel: "Back Side",
-    exportTitle: "Export",
-    importTitle: "Import",
-    exportLbl: "Select folder to export:",
-    importLbl: "Select .json file:"
+    importLbl: "Выберите файл .json:",
+    moreFolders: "Ещё папки",
+    lessFolders: "Свернуть папки"
   },
   cs: {
     appTitle: "Kartičky App",
@@ -115,7 +119,9 @@ const i18n = {
     exportTitle: "Export",
     importTitle: "Import",
     exportLbl: "Vyberte složku pro export:",
-    importLbl: "Vyberte soubor .json:"
+    importLbl: "Vyberte soubor .json:",
+    moreFolders: "Další složky",
+    lessFolders: "Méně složek"
   },
   es: {
     appTitle: "Tarjetas App",
@@ -154,7 +160,9 @@ const i18n = {
     exportTitle: "Exportar",
     importTitle: "Importar",
     exportLbl: "Seleccionar carpeta para exportar:",
-    importLbl: "Seleccionar archivo .json:"
+    importLbl: "Seleccionar archivo .json:",
+    moreFolders: "Más carpetas",
+    lessFolders: "Menos carpetas"
   },
   tr: {
     appTitle: "Flashcards App",
@@ -193,24 +201,29 @@ const i18n = {
     exportTitle: "Dışa Aktar",
     importTitle: "İçe Aktar",
     exportLbl: "Dışa aktarılacak klasörü seçin:",
-    importLbl: ".json dosyasını seçin:"
+    importLbl: ".json dosyasını seçin:",
+    moreFolders: "Daha fazla klasör",
+    lessFolders: "Daha az klasör"
   }
 };
 
-// --- Инициализация состояния ---
-let currentLang = localStorage.getItem('flash_lang') || 'ru';
+// Application state initialization (Default language is English)
+let currentLang = localStorage.getItem('flash_lang') || 'en';
 let folders = JSON.parse(localStorage.getItem('flash_folders')) || [i18n[currentLang].mainFolder];
 let cards = JSON.parse(localStorage.getItem('flash_cards')) || [];
-let activeFolder = 'Все';
+let activeFolder = 'All';
 let editingCardImage = null;
+let isFoldersExpanded = false;
 
 let studyCardsList = [];
 let studyCurrentIndex = 0;
 let studyCardMode = 'translation';
 
-// DOM элементы
+// DOM elements
 const langSelect = document.getElementById('lang-select');
 const foldersList = document.getElementById('folders-list');
+const toggleFoldersBtn = document.getElementById('toggle-folders-btn');
+const toggleFoldersText = document.getElementById('toggle-folders-text');
 const cardsGrid = document.getElementById('cards-grid');
 const newFolderInput = document.getElementById('new-folder-input');
 const addFolderBtn = document.getElementById('add-folder-btn');
@@ -268,11 +281,13 @@ const nextCardBtn = document.getElementById('next-card-btn');
 
 langSelect.value = currentLang;
 
+// Save data to localStorage
 function saveData() {
   localStorage.setItem('flash_folders', JSON.stringify(folders));
   localStorage.setItem('flash_cards', JSON.stringify(cards));
 }
 
+// Image input source toggle (file vs URL)
 imageSourceRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (e.target.value === 'file') {
@@ -287,6 +302,7 @@ imageSourceRadios.forEach(radio => {
   });
 });
 
+// Update UI texts according to current language
 function updateStaticTexts() {
   const t = i18n[currentLang];
 
@@ -320,6 +336,8 @@ function updateStaticTexts() {
   document.getElementById('i18n-import-title').textContent = t.importTitle;
   document.getElementById('i18n-export-lbl').textContent = t.exportLbl;
   document.getElementById('i18n-import-lbl').textContent = t.importLbl;
+
+  toggleFoldersText.textContent = isFoldersExpanded ? t.lessFolders : t.moreFolders;
 }
 
 langSelect.onchange = (e) => {
@@ -329,17 +347,23 @@ langSelect.onchange = (e) => {
   render();
 };
 
+// Render folder list with collapsible arrow mechanism
 function renderFolders() {
   const t = i18n[currentLang];
   foldersList.innerHTML = '';
 
+  // "All Flashcards" item
   const allLi = document.createElement('li');
   allLi.innerHTML = `<span>${t.allFolder}</span>`;
-  if (activeFolder === 'Все') allLi.classList.add('active');
-  allLi.onclick = () => { activeFolder = 'Все'; render(); };
+  if (activeFolder === 'All' || activeFolder === 'Все') allLi.classList.add('active');
+  allLi.onclick = () => { activeFolder = 'All'; render(); };
   foldersList.appendChild(allLi);
 
-  folders.forEach(folder => {
+  // Maximum folders to show before collapsing
+  const maxVisible = 3; 
+  const foldersToDisplay = isFoldersExpanded ? folders : folders.slice(0, maxVisible);
+
+  foldersToDisplay.forEach(folder => {
     const li = document.createElement('li');
     if (activeFolder === folder) li.classList.add('active');
     
@@ -362,9 +386,24 @@ function renderFolders() {
     foldersList.appendChild(li);
   });
 
+  // Toggle button visibility check
+  if (folders.length > maxVisible) {
+    toggleFoldersBtn.classList.remove('hidden');
+    if (isFoldersExpanded) {
+      toggleFoldersBtn.classList.add('expanded');
+      toggleFoldersText.textContent = t.lessFolders;
+    } else {
+      toggleFoldersBtn.classList.remove('expanded');
+      toggleFoldersText.textContent = t.moreFolders;
+    }
+  } else {
+    toggleFoldersBtn.classList.add('hidden');
+  }
+
+  // Populate dropdown options
   folderSelect.innerHTML = '';
-  studyFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
-  exportFolderSelect.innerHTML = `<option value="Все">${t.allCards}</option>`;
+  studyFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
+  exportFolderSelect.innerHTML = `<option value="All">${t.allCards}</option>`;
 
   folders.forEach(folder => {
     const opt1 = document.createElement('option');
@@ -381,6 +420,13 @@ function renderFolders() {
   });
 }
 
+// Expand / collapse folders button click handler
+toggleFoldersBtn.onclick = () => {
+  isFoldersExpanded = !isFoldersExpanded;
+  renderFolders();
+  updateStaticTexts();
+};
+
 function deleteFolder(folderName) {
   const t = i18n[currentLang];
   const mainFolderName = folders[0];
@@ -388,7 +434,7 @@ function deleteFolder(folderName) {
 
   folders = folders.filter(f => f !== folderName);
   cards = cards.map(card => card.folder === folderName ? { ...card, folder: mainFolderName } : card);
-  if (activeFolder === folderName) activeFolder = 'Все';
+  if (activeFolder === folderName) activeFolder = 'All';
 
   saveData();
   render();
@@ -397,9 +443,9 @@ function deleteFolder(folderName) {
 function renderCards() {
   const t = i18n[currentLang];
   cardsGrid.innerHTML = '';
-  currentFolderTitle.textContent = activeFolder === 'Все' ? t.allCards : `${t.folderPrefix}${activeFolder}`;
+  currentFolderTitle.textContent = (activeFolder === 'All' || activeFolder === 'Все') ? t.allCards : `${t.folderPrefix}${activeFolder}`;
 
-  const filteredCards = activeFolder === 'Все' ? cards : cards.filter(card => card.folder === activeFolder);
+  const filteredCards = (activeFolder === 'All' || activeFolder === 'Все') ? cards : cards.filter(card => card.folder === activeFolder);
 
   if (filteredCards.length === 0) {
     cardsGrid.innerHTML = `<p style="color: #6b7280;">${t.noCards}</p>`;
@@ -440,7 +486,7 @@ function deleteCard(id) {
 
 addFolderBtn.onclick = () => {
   const name = newFolderInput.value.trim();
-  if (name && !folders.includes(name) && name !== 'Все') {
+  if (name && !folders.includes(name) && name !== 'All' && name !== 'Все') {
     folders.push(name);
     newFolderInput.value = '';
     saveData();
@@ -457,7 +503,7 @@ openModalBtn.onclick = () => {
   imageInput.classList.remove('hidden');
   imageUrlInput.classList.add('hidden');
   modalTitle.textContent = i18n[currentLang].modalTitleNew;
-  folderSelect.value = (activeFolder !== 'Все' && folders.includes(activeFolder)) ? activeFolder : folders[0];
+  folderSelect.value = (activeFolder !== 'All' && activeFolder !== 'Все' && folders.includes(activeFolder)) ? activeFolder : folders[0];
   modal.classList.remove('hidden');
 };
 
@@ -536,8 +582,8 @@ closeIoBtn.onclick = () => ioModal.classList.add('hidden');
 doExportBtn.onclick = () => {
   const folderToExport = exportFolderSelect.value;
   let exportData = {
-    folders: folderToExport === 'Все' ? folders : [folderToExport],
-    cards: folderToExport === 'Все' ? cards : cards.filter(c => c.folder === folderToExport)
+    folders: (folderToExport === 'All' || folderToExport === 'Все') ? folders : [folderToExport],
+    cards: (folderToExport === 'All' || folderToExport === 'Все') ? cards : cards.filter(c => c.folder === folderToExport)
   };
 
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
@@ -552,7 +598,7 @@ doExportBtn.onclick = () => {
 doImportBtn.onclick = () => {
   const file = importFileInput.files[0];
   if (!file) {
-    alert("Выберите файл!");
+    alert("Please select a file!");
     return;
   }
 
@@ -574,12 +620,12 @@ doImportBtn.onclick = () => {
         saveData();
         render();
         ioModal.classList.add('hidden');
-        alert("Импорт успешно завершен!");
+        alert("Import completed successfully!");
       } else {
-        alert("Неверный формат файла JSON!");
+        alert("Invalid JSON file structure!");
       }
     } catch (err) {
-      alert("Ошибка при чтении файла JSON!");
+      alert("Error reading JSON file!");
     }
   };
   reader.readAsText(file);
@@ -599,7 +645,7 @@ gistPushBtn.onclick = async () => {
   let gistId = gistIdInput.value.trim();
 
   if (!token) {
-    alert("Введите Personal Access Token от GitHub!");
+    alert("Please enter a GitHub Personal Access Token!");
     return;
   }
 
@@ -638,12 +684,12 @@ gistPushBtn.onclick = async () => {
       gistId = data.id;
       localStorage.setItem('flash_gist_id', gistId);
       gistIdInput.value = gistId;
-      alert("Данные успешно сохранены в GitHub Gist!");
+      alert("Data successfully saved to GitHub Gist!");
     } else {
-      alert("Ошибка GitHub API: " + (data.message || "Не удалось загрузить"));
+      alert("GitHub API Error: " + (data.message || "Failed to upload"));
     }
   } catch (err) {
-    alert("Ошибка сети при попытке синхронизации");
+    alert("Network error while trying to sync");
   }
 };
 
@@ -652,7 +698,7 @@ gistPullBtn.onclick = async () => {
   const gistId = gistIdInput.value.trim();
 
   if (!token || !gistId) {
-    alert("Введите Token и Gist ID!");
+    alert("Please enter Token and Gist ID!");
     return;
   }
 
@@ -669,12 +715,12 @@ gistPullBtn.onclick = async () => {
       saveData();
       render();
       gistModal.classList.add('hidden');
-      alert("Данные успешно загружены из Gist!");
+      alert("Data successfully loaded from Gist!");
     } else {
-      alert("Не удалось прочитать Gist!");
+      alert("Could not read Gist content!");
     }
   } catch (err) {
-    alert("Ошибка сети при получении данных из Gist");
+    alert("Network error while fetching data from Gist");
   }
 };
 
@@ -690,7 +736,7 @@ startStudyBtn.onclick = () => {
   const selectedFolder = studyFolderSelect.value;
   studyCardMode = document.querySelector('input[name="study-mode-type"]:checked').value;
 
-  studyCardsList = selectedFolder === 'Все' ? [...cards] : cards.filter(c => c.folder === selectedFolder);
+  studyCardsList = (selectedFolder === 'All' || selectedFolder === 'Все') ? [...cards] : cards.filter(c => c.folder === selectedFolder);
 
   if (studyCardsList.length === 0) {
     alert(i18n[currentLang].noCards);
