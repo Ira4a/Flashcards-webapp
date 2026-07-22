@@ -276,7 +276,7 @@ h1 {
 .card .word {
   font-size: 1.1rem;
   font-weight: bold;
-  text-align: justify;
+  text-align: left;
   padding-right: 1.2rem;
 }
 
@@ -284,7 +284,7 @@ h1 {
   color: var(--primary);
   font-weight: 600;
   font-size: 0.95rem;
-  text-align: justify;
+  text-align: left;
 }
 
 .card .definition {
