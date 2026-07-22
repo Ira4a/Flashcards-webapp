@@ -480,8 +480,8 @@ input[type="file"]::file-selector-button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow-y: auto;
 }
 
@@ -491,12 +491,22 @@ input[type="file"]::file-selector-button {
 }
 
 .flashcard-text {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: var(--text);
   word-break: break-word;
-  text-align: justify;
+  text-align: center; 
   width: 100%;
+}
+
+.flashcard-text.text-left {
+  text-align: left;
+  font-weight: normal;
+  font-size: 1.05rem;
+}
+
+.card-side-label {
+  display: none;
 }
 
 .flashcard-img-preview {
