@@ -231,7 +231,7 @@ h1 {
 .card .word {
   font-size: 1.1rem;
   font-weight: bold;
-  text-align: justify;
+  text-align: left;
   padding-right: 1.2rem;
 }
 
