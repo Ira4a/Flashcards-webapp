@@ -308,6 +308,119 @@ function syncMainFolderName(newLang) {
     saveData();
   }
 }
+// --- Sync Gist (Updated block with key auto-saving) ---
+
+// Automatically save Token immediately as the user types or pastes
+gistTokenInput.addEventListener('input', (e) => {
+  localStorage.setItem('flash_gist_token', e.target.value.trim());
+});
+
+// Automatically save Gist ID immediately as the user types or pastes
+gistIdInput.addEventListener('input', (e) => {
+  localStorage.setItem('flash_gist_id', e.target.value.trim());
+});
+
+syncGistBtn.onclick = () => {
+  headerRight.classList.remove('open');
+  // Retrieve saved keys from local storage
+  gistTokenInput.value = localStorage.getItem('flash_gist_token') || '';
+  gistIdInput.value = localStorage.getItem('flash_gist_id') || '';
+  gistModal.classList.remove('hidden');
+};
+
+closeGistBtn.onclick = () => gistModal.classList.add('hidden');
+
+// Push button (Upload data to GitHub)
+gistPushBtn.onclick = async () => {
+  const token = gistTokenInput.value.trim();
+  let gistId = gistIdInput.value.trim();
+
+  if (!token) {
+    alert("Please enter a GitHub Personal Access Token!");
+    return;
+  }
+
+  // Force-save keys to local storage
+  localStorage.setItem('flash_gist_token', token);
+  if (gistId) localStorage.setItem('flash_gist_id', gistId);
+
+  const payload = {
+    description: "Flashcards App Data Sync",
+    public: false,
+    files: {
+      "flashcards.json": {
+        content: JSON.stringify({ folders, cards }, null, 2)
+      }
+    }
+  };
+
+  try {
+    let url = "https://api.github.com/gists";
+    let method = "POST";
+
+    if (gistId) {
+      url += `/${gistId}`;
+      method = "PATCH";
+    }
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": `token ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      gistId = data.id;
+      localStorage.setItem('flash_gist_id', gistId); // Store the newly created Gist ID
+      gistIdInput.value = gistId;
+      alert("Data successfully saved to GitHub Gist!");
+    } else {
+      alert("GitHub API Error: " + (data.message || "Failed to upload"));
+    }
+  } catch (err) {
+    alert("Network error while trying to sync");
+  }
+};
+
+// Pull button (Download data from GitHub)
+gistPullBtn.onclick = async () => {
+  const token = gistTokenInput.value.trim();
+  const gistId = gistIdInput.value.trim();
+
+  if (!token || !gistId) {
+    alert("Please enter Token and Gist ID!");
+    return;
+  }
+
+  // Save keys to local storage during download as well
+  localStorage.setItem('flash_gist_token', token);
+  localStorage.setItem('flash_gist_id', gistId);
+
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { "Authorization": `token ${token}` }
+    });
+
+    const data = await res.json();
+    if (res.ok && data.files && data.files["flashcards.json"]) {
+      const content = JSON.parse(data.files["flashcards.json"].content);
+      folders = content.folders || folders;
+      cards = content.cards || cards;
+      saveData();
+      render();
+      gistModal.classList.add('hidden');
+      alert("Data successfully loaded from Gist!");
+    } else {
+      alert("Could not read Gist content!");
+    }
+  } catch (err) {
+    alert("Network error while fetching data from Gist");
+  }
+};
 
 function saveData() {
   localStorage.setItem('flash_folders', JSON.stringify(folders));
