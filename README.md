@@ -71,6 +71,3 @@ To keep your vocabulary synchronized across different devices:
 
 ---
 
-## License
-
-This project is open-source and available under the MIT License.
